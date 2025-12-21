@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { assets, footer_data } from "../assets/assets";
 
 const Footer = () => {
@@ -21,19 +22,41 @@ const Footer = () => {
               <h3 className="font-semibold text-base text-gray-900 md:mb-5 mb-2">
                 {section.title}
               </h3>
+
               <ul className="text-sm space-y-1">
                 {section.links.map((link, i) => (
                   <li key={i}>
-                    <a href="#" className="hover:underline transition">
-                      {link}
-                    </a>
+                    {link.path ? (
+                      <Link
+                        to={link.path}
+                        className="hover:underline transition"
+                      >
+                        {link.label}
+                      </Link>
+                    ) : (
+                      <a
+                        href={link.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="hover:underline transition"
+                      >
+                        {link.label}
+                      </a>
+                    )}
                   </li>
                 ))}
               </ul>
             </div>
           ))}
+          <div>
+            <h3 className="font-semibold text-xl text-center text-gray-900 md:mb-1 mb-2">
+              Contact Info
+            </h3>
+            <p className="text-lg space-y-1">help.career.compass@gmail.com</p>
+          </div>
         </div>
       </div>
+
       <p className="py-4 text-center text-sm md:text-base text-gray-500/80">
         Copyright 2025 © Career Compass - All Right Reserved.
       </p>

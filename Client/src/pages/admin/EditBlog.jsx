@@ -271,7 +271,7 @@ const EditBlog = () => {
           <button
             type="submit"
             disabled={isSaving}
-            className="mt-10 w-48 h-12 bg-primary text-white rounded text-base hover:opacity-90 transition"
+            className="mt-10 w-48 h-12 bg-primary text-white rounded text-base hover:opacity-90 transition cursor-pointer"
           >
             {isSaving ? "Saving..." : "Save Changes"}
           </button>

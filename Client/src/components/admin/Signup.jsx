@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAppContext } from "../../context/AppContext";
 import toast from "react-hot-toast";
 
 const Signup = () => {
   const navigate = useNavigate();
-  const { axios, setToken, setUser } = useAppContext();
+  const { axios } = useAppContext();
 
   const [isAdding, setIsAdding] = useState(false);
 
@@ -30,17 +30,12 @@ const Signup = () => {
         year,
       };
 
-      const { data } = await axios.post("/api/auth/signup", payload);
+      await axios.post("/api/auth/signup", payload);
 
-      // AUTO LOGIN
-      localStorage.setItem("token", data.token);
-      axios.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
+      toast.success("OTP sent to your email");
 
-      setToken(data.token);
-      setUser(data.user);
-
-      toast.success("Signed up & logged in successfully");
-      navigate("/", { replace: true });
+      // REDIRECT TO OTP PAGE
+      navigate(`/verify-otp?email=${email}`);
 
       // reset form
       setName("");
@@ -56,7 +51,7 @@ const Signup = () => {
   };
 
   return (
-    <div className="flex items-center justify-center h-screen">
+    <div className="flex flex-col items-center justify-center h-screen">
       <div className="w-full max-w-sm p-6 max-md:m-6 border border-primary/30 shadow-xl shadow-primary/15 rounded-lg">
         <div className="flex flex-col items-center justify-center">
           <div className="w-full py-6 text-center">
@@ -113,7 +108,7 @@ const Signup = () => {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 cursor-pointer"
                 >
                   <i
                     className={`fa-solid ${
@@ -131,7 +126,7 @@ const Signup = () => {
                 onChange={(e) => setBranch(e.target.value)}
                 value={branch}
                 required
-                className="border-b-2 border-gray-300 p-2 outline-none mb-6 bg-transparent"
+                className="border-b-2 border-gray-300 p-2 outline-none mb-6 bg-transparent cursor-pointer"
               >
                 <option value="">Select Branch</option>
                 <option value="Architecture">Architecture</option>
@@ -153,7 +148,7 @@ const Signup = () => {
                 onChange={(e) => setYear(e.target.value)}
                 value={year}
                 required
-                className="border-b-2 border-gray-300 p-2 outline-none mb-8 bg-transparent"
+                className="border-b-2 border-gray-300 p-2 outline-none mb-8 bg-transparent cursor-pointer"
               >
                 <option value="">Select Year</option>
                 <option value="1st Year">1st Year</option>
@@ -167,13 +162,20 @@ const Signup = () => {
             <button
               type="submit"
               disabled={isAdding}
-              className="w-full py-3 font-medium bg-primary text-white rounded cursor-pointer hover:bg-primary/90 transition-all"
+              className="w-full py-3 font-medium bg-primary text-white rounded cursor-pointer hover:bg-primary/90 transition-all cursor-pointer"
             >
-              {isAdding ? "Signing up" : "Sign Up"}
+              {isAdding ? "Signing up..." : "Sign Up"}
             </button>
           </form>
         </div>
       </div>
+
+      <p className="mt-4 text-sm">
+        Already have an account?{" "}
+        <Link to="/login" className="text-primary font-semibold cursor-pointer">
+          Login
+        </Link>
+      </p>
     </div>
   );
 };

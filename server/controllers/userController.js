@@ -1,6 +1,7 @@
 import Blog from "../models/Blog.js";
 import Comment from "../models/Comment.js";
 import User from "../models/User.js";
+import { cloudinary } from "../configs/cloudinary.js";
 
 // GET USER PROFILE
 export const getProfile = async (req, res) => {
@@ -39,21 +40,39 @@ export const deleteProfile = async (req, res) => {
   try {
     const userId = req.user._id;
 
-    // Find all blogs by user
-    const blogs = await Blog.find({ author: userId }).select("_id");
+    // FIND ALL BLOGS BY USER
+    const blogs = await Blog.find({ author: userId });
 
-    const blogIds = blogs.map((blog) => blog._id);
+    // DELETE CLOUDINARY FILES FOR EACH BLOG
+    for (const blog of blogs) {
+      try {
+        if (blog.profileImage?.public_id) {
+          await cloudinary.uploader.destroy(blog.profileImage.public_id);
+        }
+      } catch (err) {
+        console.error("Profile image delete failed:", err.message);
+      }
 
-    // Delete all comments on user's blogs
+      try {
+        if (blog.resume?.public_id) {
+          await cloudinary.uploader.destroy(blog.resume.public_id);
+        }
+      } catch (err) {
+        console.error("Resume delete failed:", err.message);
+      }
+    }
+
+    // DELETE COMMENTS ON USER BLOGS
+    const blogIds = blogs.map((b) => b._id);
     await Comment.deleteMany({ blog: { $in: blogIds } });
 
-    // Delete all blogs by user
+    // DELETE BLOGS
     await Blog.deleteMany({ author: userId });
 
-    // Delete all comments written by user (on other blogs)
+    // DELETE USER COMMENTS (OTHER BLOGS)
     await Comment.deleteMany({ author: userId });
 
-    // Finally delete the user
+    // DELETE USER
     await User.findByIdAndDelete(userId);
 
     res.status(200).json({
@@ -61,6 +80,31 @@ export const deleteProfile = async (req, res) => {
     });
   } catch (error) {
     console.error("Delete profile error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+// GET PUBLIC USER PROFILE
+export const getPublicProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id).select(
+      "name branch year createdAt"
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const blogs = await Blog.find({
+      author: user._id,
+      isApproved: true,
+    }).sort({ createdAt: -1 });
+
+    res.status(200).json({
+      user,
+      blogs,
+    });
+  } catch (error) {
     res.status(500).json({ message: "Server error" });
   }
 };

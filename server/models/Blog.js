@@ -80,6 +80,13 @@ const blogSchema = new mongoose.Schema(
       default: 0,
     },
 
+    applaudedBy: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+
     isApproved: {
       type: Boolean,
       default: true,

@@ -13,11 +13,14 @@ const Blog = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const { axios, token, user, authLoading, fetchBlogs } = useAppContext();
+  const { axios, token, user, authLoading, fetchBlogs, updateBlogInState } =
+    useAppContext();
 
   const [data, setData] = useState(null);
   const [comments, setComments] = useState([]);
   const [content, setContent] = useState("");
+  const [applauds, setApplauds] = useState(0);
+  const [hasApplauded, setHasApplauded] = useState(false);
 
   // ---------- AI SUMMARY ----------
   const [summary, setSummary] = useState("");
@@ -30,6 +33,32 @@ const Blog = () => {
       setData(data);
     } catch {
       toast.error("Failed to load blog");
+    }
+  };
+
+  useEffect(() => {
+    if (data) {
+      setApplauds(data.applauds || 0);
+      setHasApplauded(
+        token && user ? data.applaudedBy?.includes(user._id) : false
+      );
+    }
+  }, [data, token, user]);
+
+  const handleApplaud = async () => {
+    if (!token) {
+      toast.error("Login to applaud");
+      return;
+    }
+
+    try {
+      const { data } = await axios.post(`/api/blogs/${id}/applaud`);
+      setApplauds(data.applauds);
+      setHasApplauded(data.hasApplauded);
+
+      updateBlogInState(data.blog);
+    } catch {
+      toast.error("Failed to applaud");
     }
   };
 
@@ -118,7 +147,14 @@ const Blog = () => {
   useEffect(() => {
     fetchBlogData();
     fetchComment();
-  }, []);
+
+    const viewedKey = `viewed_blog_${id}`;
+
+    if (!localStorage.getItem(viewedKey)) {
+      axios.post(`/api/blogs/${id}/view`).catch(() => {});
+      localStorage.setItem(viewedKey, "true");
+    }
+  }, [id]);
 
   if (authLoading || !data) return <Loader />;
 
@@ -133,7 +169,7 @@ const Blog = () => {
     : null;
 
   const isAuthor =
-    token && user && data.author?._id?.toString() === user._id?.toString();
+    !!user && data.author?._id?.toString() === user._id?.toString();
 
   return (
     <div className="relative">
@@ -156,13 +192,16 @@ const Blog = () => {
         </h1>
 
         {/* AUTHOR NAME */}
-        <div className="flex justify-center mt-6">
-          <span className="inline-block py-1 px-4 rounded-full border text-sm border-primary/35 bg-primary/5 font-medium text-primary">
-            {data.author?.name}
-          </span>
-        </div>
+        <button
+          onClick={() => navigate(`/profile/${data.author._id}`)}
+          className="inline-block py-1 px-4 mt-5 rounded-full border text-sm
+              border-primary/35 bg-primary/5 font-medium text-primary
+              hover:bg-primary/10 transition cursor-pointer"
+        >
+          {data.author?.name}
+        </button>
 
-        {/* AI SUMMARY BUTTON (BELOW NAME) */}
+        {/* AI SUMMARY BUTTON */}
         <div className="flex justify-center mt-4">
           <button
             onClick={generateSummary}
@@ -237,6 +276,33 @@ const Blog = () => {
           </div>
         )}
 
+        <div className="flex justify-between mt-10 max-w-3xl mx-auto">
+          <span className="flex items-center gap-1 text-xl text-black-600">
+            {data.views} views
+          </span>
+
+          <button
+            onClick={handleApplaud}
+            className="relative flex items-center gap-2 text-2xl font-semibold text-primary transition-transform active:scale-90 cursor-pointer"
+          >
+            <span
+              className={`absolute -top-6 left-1/2 -translate-x-1/2 text-yellow-400 text-xl
+          ${hasApplauded ? "animate-float" : "hidden"}`}
+            >
+              👏
+            </span>
+
+            {/* Clap icon */}
+            <i
+              className={`fa-solid fa-hands-clapping transition-transform duration-200
+          ${hasApplauded ? "scale-115 text-yellow-400" : "text-black"}`}
+            ></i>
+
+            {/* Count */}
+            <span className="text-xl">{applauds}</span>
+          </button>
+        </div>
+
         {/* -------- COMMENTS -------- */}
         <div className="mt-14 mb-10 max-w-3xl mx-auto">
           <p className="font-semibold mb-4">Comments ({comments.length})</p>
@@ -244,9 +310,7 @@ const Blog = () => {
           <div className="flex flex-col gap-4">
             {comments.map((item) => {
               const isCommentAuthor =
-                token &&
-                user &&
-                item.author?._id?.toString() === user._id?.toString();
+                !!user && item.author?._id?.toString() === user._id?.toString();
 
               return (
                 <div
@@ -260,7 +324,7 @@ const Blog = () => {
                     {isCommentAuthor && (
                       <button
                         onClick={() => deleteComment(item._id)}
-                        className="ml-auto text-red-500 text-sm hover:underline"
+                        className="ml-auto text-red-500 text-sm hover:underline cursor-pointer"
                       >
                         Delete
                       </button>

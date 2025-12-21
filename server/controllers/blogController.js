@@ -219,3 +219,34 @@ export const deleteBlog = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+//------------APPLAUDS---------------
+export const toggleApplaud = async (req, res) => {
+  const blog = await Blog.findById(req.params.id);
+
+  if (!blog) {
+    return res.status(404).json({ message: "Blog not found" });
+  }
+
+  const userId = req.user._id.toString();
+  const index = blog.applaudedBy.indexOf(userId);
+
+  let hasApplauded = false;
+
+  if (index === -1) {
+    blog.applaudedBy.push(userId);
+    blog.applauds += 1;
+    hasApplauded = true;
+  } else {
+    blog.applaudedBy.splice(index, 1);
+    blog.applauds -= 1;
+  }
+
+  await blog.save();
+
+  res.json({
+    applauds: blog.applauds,
+    hasApplauded,
+    blog,
+  });
+};

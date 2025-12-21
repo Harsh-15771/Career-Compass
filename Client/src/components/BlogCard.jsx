@@ -47,6 +47,18 @@ const BlogCard = ({ blog }) => {
         {/* Footer */}
         <div className="mt-5 flex items-center justify-between text-xs text-gray-400">
           <span>{Moment(blog.createdAt).format("MMMM D, YYYY")}</span>
+          <div className="flex items-center gap-4">
+            <span className="flex items-center gap-1">
+              {blog.views || 0} views
+            </span>
+
+            <span className="flex items-center gap-1">
+              <i
+                className={`fa-solid fa-hands-clapping transition-transform duration-200 text-black`}
+              ></i>{" "}
+              {blog.applauds || 0}
+            </span>
+          </div>
           <span className="text-primary text-lg">→</span>
         </div>
       </div>

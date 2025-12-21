@@ -45,6 +45,19 @@ const userSchema = new mongoose.Schema(
     avatar: {
       type: String, // profile image URL
     },
+
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+
+    otp: {
+      type: String,
+    },
+
+    otpExpiry: {
+      type: Date,
+    },
   },
   { timestamps: true }
 );

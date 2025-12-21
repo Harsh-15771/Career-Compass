@@ -61,6 +61,19 @@ export const AppProvider = ({ children }) => {
     }
   }, []);
 
+  useEffect(() => {
+    if (token) {
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    }
+  }, [token]);
+
+  const updateBlogInState = (updatedBlog) => {
+    if (!updatedBlog?._id) return;
+    setBlogs((prev) =>
+      prev.map((b) => (b?._id === updatedBlog._id ? updatedBlog : b))
+    );
+  };
+
   const value = {
     axios,
     token,
@@ -70,10 +83,12 @@ export const AppProvider = ({ children }) => {
     authLoading,
     logout,
     blogs,
+    setBlogs,
     input,
     setInput,
     fetchBlogs,
     fetchUserProfile,
+    updateBlogInState,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

@@ -1,30 +1,45 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { blogCategories } from "../assets/assets";
 import { motion } from "motion/react";
 import BlogCard from "./BlogCard";
 import { useAppContext } from "../context/AppContext";
+import { useSearchParams } from "react-router-dom";
 
 const BlogList = () => {
   const [menu, setMenu] = useState("All");
   const { blogs, input } = useAppContext();
 
+  // ✅ READ QUERY PARAMS
+  const [searchParams] = useSearchParams();
+  const offerTypeFromUrl = searchParams.get("offerType");
+
+  /* ---------------- FILTER LOGIC ---------------- */
   const filteredBlogs = () => {
     if (!blogs || blogs.length === 0) return [];
 
-    if (!input.trim()) return blogs;
+    let result = blogs;
 
-    const search = input.toLowerCase();
-
-    return blogs.filter((blog) => {
-      return (
-        blog.company?.toLowerCase().includes(search) ||
-        blog.offerType?.toLowerCase().includes(search) ||
-        blog.author?.name?.toLowerCase().includes(search) ||
-        blog.role?.toLowerCase().includes(search)
+    // 🔹 SEARCH FILTER
+    if (input.trim()) {
+      const search = input.toLowerCase();
+      result = result.filter(
+        (blog) =>
+          blog.company?.toLowerCase().includes(search) ||
+          blog.offerType?.toLowerCase().includes(search) ||
+          blog.author?.name?.toLowerCase().includes(search) ||
+          blog.role?.toLowerCase().includes(search)
       );
-    });
+    }
+
+    // 🔹 OFFER TYPE FILTER (FROM URL)
+    if (offerTypeFromUrl) {
+      result = result.filter((blog) => blog.offerType === offerTypeFromUrl);
+    }
+
+    return result;
   };
 
+  // 🔹 ROLE FILTER (MENU)
   const results = filteredBlogs().filter((blog) =>
     menu === "All" ? true : blog.role === menu
   );

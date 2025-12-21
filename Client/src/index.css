@@ -85,3 +85,22 @@
 .rich-text a {
   color: #007aff;
 }
+
+@keyframes floatUp {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 20px) scale(0.9);
+  }
+  30% {
+    opacity: 1;
+    transform: translate(-50%, -10px) scale(1.3);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -60px) scale(1.5);
+  }
+}
+
+.animate-float {
+  animation: floatUp 1s ease-out forwards;
+}

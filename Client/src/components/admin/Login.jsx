@@ -68,11 +68,17 @@ const Login = () => {
               className="w-full border-b-2 p-2 pr-10 outline-none"
               placeholder="Enter your Password"
             />
+            <p
+              onClick={() => navigate("/forgot-password")}
+              className="text-sm text-right text-primary cursor-pointer hover:underline mb-4 pt-2"
+            >
+              Forgot Password?
+            </p>
 
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 cursor-pointer"
+              className="absolute right-2 top-1/3 -translate-y-1/2 text-gray-500 hover:text-gray-700 cursor-pointer"
             >
               <i
                 className={`fa-solid ${

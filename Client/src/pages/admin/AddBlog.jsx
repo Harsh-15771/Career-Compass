@@ -135,7 +135,7 @@ const AddBlog = () => {
       >
         <div className="bg-white w-full max-w-4xl p-6 md:p-10 my-10 shadow rounded">
           {/* Upload Photo */}
-          <p className="font-medium">Upload your photo (optional)</p>
+          <p className="font-medium">Upload your photo</p>
           <label htmlFor="profileImage">
             <img
               src={
@@ -164,8 +164,8 @@ const AddBlog = () => {
               required
             >
               <option value="">Placement Cycle</option>
-              <option>CDC 2023–24</option>
-              <option>CDC 2024–25</option>
+              <option>CDC 2023-24</option>
+              <option>CDC 2024-25</option>
             </select>
 
             <select

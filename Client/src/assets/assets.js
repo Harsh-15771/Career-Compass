@@ -212,15 +212,19 @@ export const blog_data = [
 export const footer_data = [
   {
     title: "Quick Links",
-    links: ["Home", "About Us", "Contact Us", "FAQs"],
+    links: [
+      { label: "Home", path: "/" },
+      { label: "About Us", path: "/about" },
+      { label: "Contact Us", path: "/contact" },
+      { label: "FAQs", path: "/faqs" },
+    ],
   },
   {
     title: "Resources",
-    links: ["Internship Blogs", "Placement Blogs"],
-  },
-  {
-    title: "Follow Us",
-    links: ["Instagram", "Twitter", "Facebook", "Youtube"],
+    links: [
+      { label: "Internship Blogs", path: "/?offerType=Internship" },
+      { label: "Placement Blogs", path: "/?offerType=Placement" },
+    ],
   },
 ];
 

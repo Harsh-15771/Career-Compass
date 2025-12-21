@@ -4,6 +4,7 @@ import {
   getProfile,
   updateProfile,
   deleteProfile,
+  getPublicProfile,
 } from "../controllers/userController.js";
 
 const router = express.Router();
@@ -11,5 +12,6 @@ const router = express.Router();
 router.get("/profile", authMiddleware, getProfile);
 router.put("/profile", authMiddleware, updateProfile);
 router.delete("/profile", authMiddleware, deleteProfile);
+router.get("/:id", getPublicProfile);
 
 export default router;

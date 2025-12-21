@@ -10,6 +10,12 @@ import { useAppContext } from "./context/AppContext";
 import "quill/dist/quill.snow.css";
 import Profile from "./pages/admin/Profile";
 import EditBlog from "./pages/admin/EditBlog";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
+import FAQs from "./pages/FAQs";
+import VerifyOtp from "./pages/VerifyOtp";
+import ForgotPassword from "./components/admin/ForgotPassword";
+import ResetPassword from "./components/admin/ResetPassword";
 
 const App = () => {
   const { token, authLoading } = useAppContext();
@@ -37,7 +43,14 @@ const App = () => {
           }
         />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/profile/:id" element={<Profile />} />
         <Route path="/edit-blog/:id" element={<EditBlog />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/faqs" element={<FAQs />} />
+        <Route path="/verify-otp" element={<VerifyOtp />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
       </Routes>
     </>
   );
