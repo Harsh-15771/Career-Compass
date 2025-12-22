@@ -9,6 +9,11 @@
   display: none;
 }
 
+html,
+body {
+  overflow-x: hidden;
+}
+
 @theme {
   --color-primary: #5044e5;
 }

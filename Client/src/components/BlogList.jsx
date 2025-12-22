@@ -47,21 +47,45 @@ const BlogList = () => {
   return (
     <div>
       {/* CATEGORY MENU */}
-      <div className="flex justify-center gap-4 sm:gap-8 my-10 relative">
+      <div
+        className="
+    flex gap-3 sm:gap-8
+    my-8 sm:my-10
+    px-4
+    overflow-x-auto
+    sm:overflow-visible
+    scrollbar-hide
+    justify-start sm:justify-center
+    whitespace-nowrap
+  "
+      >
         {blogCategories.map((item) => (
-          <div key={item} className="relative">
+          <div key={item} className="relative flex-shrink-0">
             <button
               onClick={() => setMenu(item)}
-              className={`cursor-pointer text-gray-500 ${
-                menu === item && "text-white px-4 pt-0.5"
-              }`}
+              className={`
+          cursor-pointer
+          text-sm sm:text-base
+          text-gray-500
+          px-3 py-1.5
+          sm:px-4 sm:py-2
+          rounded-full
+          transition-colors
+          ${menu === item ? "text-white" : ""}
+        `}
             >
               {item}
+
               {menu === item && (
                 <motion.div
                   layoutId="underline"
                   transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                  className="absolute left-0 right-0 top-0 h-7 z-[-1] bg-primary rounded-full"
+                  className="
+              absolute inset-0
+              bg-primary
+              rounded-full
+              z-[-1]
+            "
                 />
               )}
             </button>

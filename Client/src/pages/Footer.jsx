@@ -16,7 +16,12 @@ const Footer = () => {
           </p>
         </div>
 
-        <div className="flex flex-wrap justify-between w-full md:w-[45%] gap-5">
+        <div
+          className="grid grid-cols-2
+    md:flex md:flex-wrap md:justify-between
+    w-full md:w-[45%]
+    gap-5"
+        >
           {footer_data.map((section, index) => (
             <div key={index}>
               <h3 className="font-semibold text-base text-gray-900 md:mb-5 mb-2">
@@ -48,11 +53,11 @@ const Footer = () => {
               </ul>
             </div>
           ))}
-          <div>
-            <h3 className="font-semibold text-xl text-center text-gray-900 md:mb-1 mb-2">
+          <div className="col-span-2 text-center md:col-span-1 md:text-left">
+            <h3 className="font-semibold text-base md:text-xl text-gray-900 mb-2">
               Contact Info
             </h3>
-            <p className="text-lg space-y-1">help.career.compass@gmail.com</p>
+            <p className="text-sm md:text-lg">help.career.compass@gmail.com</p>
           </div>
         </div>
       </div>

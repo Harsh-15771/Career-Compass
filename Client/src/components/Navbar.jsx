@@ -24,17 +24,17 @@ const Navbar = () => {
   }, []);
 
   return (
-    <div className="flex justify-between items-center py-4 sm:py-5 mx-4 sm:mx-20 xl:mx-32">
+    <div className="flex justify-between items-center py-4 sm:py-5 px-4 sm:px-20 xl:px-32 w-full max-w-full">
       {/* Logo */}
       <img
         onClick={() => navigate("/")}
         src={assets.logo}
         alt="Logo"
-        className="w-32 sm:w-48 lg:w-60 xl:w-72 cursor-pointer"
+        className="w-24 sm:w-48 lg:w-60 xl:w-72 max-w-full cursor-pointer"
       />
 
       {/* Right Section */}
-      <div className="flex items-center gap-3 sm:gap-5">
+      <div className="flex items-center gap-2 sm:gap-5 min-w-0">
         {/* Add New Blog */}
         <button
           onClick={() => {
@@ -45,14 +45,20 @@ const Navbar = () => {
               navigate("/addblog");
             }
           }}
-          className="px-5 py-3 text-lg font-medium rounded-full border border-gray
-    text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer"
+          className="
+    px-3 py-2 text-sm
+    sm:px-5 sm:py-3 sm:text-lg
+    font-medium rounded-full
+    border border-gray-300 text-gray-700
+    hover:bg-gray-100 transition-colors whitespace-nowrap
+    cursor-pointer
+  "
         >
           Add New Blog
         </button>
 
         {/* Dropdown */}
-        <div className="relative" ref={menuRef}>
+        <div className="relative max-w-[90vw]" ref={menuRef}>
           <button
             onClick={() => setOpen(!open)}
             className="p-3 rounded-full hover:bg-gray-100 transition-colors cursor-pointer"
