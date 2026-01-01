@@ -1,9 +1,11 @@
-import { transporter } from "../configs/mail.js";
+import { Resend } from "resend";
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export const sendOtpMail = async (email, otp) => {
   try {
-    await transporter.sendMail({
-      from: `"Career Compass Support" <${process.env.EMAIL_USER}>`,
+    await resend.emails.send({
+      from: "Career Compass <careercompass@resend.dev>",
       to: email,
       subject: "Verify your Career Compass account",
       html: `
@@ -12,12 +14,11 @@ export const sendOtpMail = async (email, otp) => {
           <p>Your OTP is:</p>
           <h1 style="letter-spacing:2px;">${otp}</h1>
           <p>This OTP is valid for <b>10 minutes</b>.</p>
-          <p>If you didn't request this, ignore this email.</p>
         </div>
       `,
     });
   } catch (err) {
-    console.error("sendOtpMail error:", err);
-    throw err; //
+    console.error("Resend email failed:", err);
+    throw err;
   }
 };
