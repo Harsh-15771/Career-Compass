@@ -55,7 +55,18 @@ export const signup = async (req, res) => {
     });
 
     // 6. Send OTP email
-    await sendOtpMail(email, otp);
+    try {
+      await sendOtpMail(email, otp);
+    } catch (err) {
+      console.error("OTP email failed:", err);
+
+      // rollback user creation (IMPORTANT)
+      await User.deleteOne({ email });
+
+      return res.status(500).json({
+        message: "Failed to send OTP. Please try again later.",
+      });
+    }
 
     res.status(201).json({
       message: "OTP sent to your email. Please verify to continue.",

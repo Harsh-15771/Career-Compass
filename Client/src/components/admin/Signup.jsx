@@ -30,11 +30,11 @@ const Signup = () => {
         year,
       };
 
-      await axios.post("/api/auth/signup", payload);
+      const res = await axios.post("/api/auth/signup", payload);
 
-      toast.success("OTP sent to your email");
+      toast.success(res.data.message);
 
-      // REDIRECT TO OTP PAGE
+      // Navigate to OTP page
       navigate(`/verify-otp?email=${email}`);
 
       // reset form
