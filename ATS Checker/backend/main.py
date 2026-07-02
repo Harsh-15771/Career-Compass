@@ -1,3 +1,11 @@
+import os
+# CRITICAL: Limit CPU threads to stay under Render's 512MB RAM limit
+os.environ["OMP_NUM_THREADS"] = "1"
+os.environ["MKL_NUM_THREADS"] = "1"
+os.environ["OPENBLAS_NUM_THREADS"] = "1"
+os.environ["VECLIB_MAXIMUM_THREADS"] = "1"
+os.environ["NUMEXPR_NUM_THREADS"] = "1"
+
 import logging
 import sys
 from pathlib import Path
@@ -37,9 +45,17 @@ async def lifespan(app:FastAPI):
         logger.info(f'Loaded {SPACY_MODEL_SECONDARY} (fallback)')
 
     logger.info(f'Loading SentenceTransformer: {SENTENCE_TRANSFORMER_MODEL}')
+    import torch
+    torch.set_num_threads(1)
+    torch.set_num_interop_threads(1)
+
     from sentence_transformers import SentenceTransformer
     app.state.embedder = SentenceTransformer(SENTENCE_TRANSFORMER_MODEL)
     logger.info(f'Loaded {SENTENCE_TRANSFORMER_MODEL}')
+
+    # Garbage collect to free memory overhead immediately
+    import gc
+    gc.collect()
 
     logger.info('All models loaded. API is ready to serve requests.')
 

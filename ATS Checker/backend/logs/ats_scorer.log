@@ -180,3 +180,11 @@
 2026-07-03 01:58:18,350 - INFO - Groq parsed summary: ''
 2026-07-03 01:58:18,350 - INFO - Groq parsed skills count: 40
 2026-07-03 01:58:18,350 - INFO - Groq parsed experience count: 2
+2026-07-03 02:28:17,592 - INFO - shutting down the api!!
+2026-07-03 02:28:20,302 - INFO - Starting ATS Resume Analyzer API...
+2026-07-03 02:28:20,302 - INFO - Loading spaCy NLP model: en_core_web_sm
+2026-07-03 02:28:23,303 - INFO - Loaded en_core_web_sm
+2026-07-03 02:28:23,303 - INFO - Loading SentenceTransformer: all-MiniLM-L6-v2
+2026-07-03 02:28:33,994 - INFO - Loaded all-MiniLM-L6-v2
+2026-07-03 02:28:33,994 - INFO - All models loaded. API is ready to serve requests.
+2026-07-03 02:28:34,107 - INFO - shutting down the api!!
