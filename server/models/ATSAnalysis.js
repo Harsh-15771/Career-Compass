@@ -12,9 +12,18 @@ const atsAnalysisSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    resume: {
+      public_id: {
+        type: String,
+        // making this optional so old records don't fail validation on save
+      },
+      url: {
+        type: String, // Cloudinary secure URL
+      },
+    },
+    // Restored for backwards compatibility with older records
     resumeUrl: {
-      type: String, // Cloudinary secure URL
-      required: true,
+      type: String,
     },
     atsScore: {
       type: Number,

@@ -2,6 +2,19 @@ import ATSAnalysis from "../models/ATSAnalysis.js";
 import { cloudinary } from "../configs/cloudinary.js";
 import fs from "fs";
 
+// Helper to extract Cloudinary public_id from secure URL
+const getPublicIdFromUrl = (url) => {
+  try {
+    const match = url?.match(/\/career-compass\/resumes\/[a-zA-Z0-9_-]+/);
+    if (match) {
+      return match[0].replace(/^\//, "");
+    }
+  } catch (e) {
+    return null;
+  }
+  return null;
+};
+
 /* ================= ANALYZE RESUME ================= */
 export const analyzeResume = async (req, res) => {
   try {
@@ -71,6 +84,11 @@ export const analyzeResume = async (req, res) => {
       await ATSAnalysis.create({
         userId: req.user._id,
         filename: resumeFile.originalname,
+        resume: {
+          public_id: resumeUpload.public_id,
+          url: resumeUpload.secure_url,
+        },
+        // Store string for backward compatibility
         resumeUrl: resumeUpload.secure_url,
         atsScore: analysisResult.ATS_score || analysisResult.ats_score || 0,
         keywordMatch: analysisResult.jd_match_analysis?.match_percentage || analysisResult.keyword_match || 0,
@@ -133,6 +151,17 @@ export const deleteHistoryEntry = async (req, res) => {
       });
     }
 
+    // Delete matching PDF file from Cloudinary before deleting DB record
+    const publicId = analysis.resume?.public_id || getPublicIdFromUrl(analysis.resumeUrl);
+    if (publicId) {
+      try {
+        // resource_type: "image" is used because Cloudinary uploads PDFs as images
+        await cloudinary.uploader.destroy(publicId, { resource_type: "image" });
+      } catch (cloudErr) {
+        console.error("Cloudinary delete failed for history entry:", cloudErr.message);
+      }
+    }
+
     await ATSAnalysis.deleteOne({ _id: id });
 
     res.status(200).json({ status: "deleted", id });
@@ -145,7 +174,8 @@ export const deleteHistoryEntry = async (req, res) => {
 /* ================= GENERATE PDF FROM ACTIVE RESULT ================= */
 export const generatePdf = async (req, res) => {
   try {
-    const response = await fetch("http://localhost:8000/api/v1/generate-pdf", {
+    const atsApiUrl = process.env.ATS_API_URL || "http://localhost:8000";
+    const response = await fetch(`${atsApiUrl}/api/v1/generate-pdf`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -186,7 +216,8 @@ export const generateHistoryPdf = async (req, res) => {
       return res.status(404).json({ message: "Analysis not found" });
     }
 
-    const response = await fetch("http://localhost:8000/api/v1/generate-pdf", {
+    const atsApiUrl = process.env.ATS_API_URL || "http://localhost:8000";
+    const response = await fetch(`${atsApiUrl}/api/v1/generate-pdf`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
