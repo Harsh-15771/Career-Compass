@@ -46,9 +46,10 @@ Beyond traditional CRUD functionality, the project emphasizes clean backend arch
       FastAPI ATS Engine
           │
           ├── SpaCy NLP
-          ├── Sentence Transformers
+          ├── TF-IDF Cosine Similarity (Scikit-Learn)
+          ├── Fuzzy Match Scorer (RapidFuzz)
           ├── Groq (Llama 3)
-          └── PDF Report Generator
+          └── PDF Report Generator (xhtml2pdf / WeasyPrint)
 ```
 
 ---
@@ -70,16 +71,19 @@ The ATS Resume Analyzer processes resumes through a multi-stage NLP and AI pipel
  Entity & Keyword Extraction
           │
           ▼
- Sentence Transformer Embeddings
+  TF-IDF Vectorization
           │
           ▼
- Cosine Similarity Matching
+  Cosine Similarity Matching
           │
           ▼
- Groq Llama-3 Analysis
+  Fuzzy Keyword Skill Check
           │
           ▼
- ATS Score + Suggestions + PDF Report
+  Groq Llama-3 Analysis
+          │
+          ▼
+  ATS Score + Suggestions + PDF Report
 ```
 
 ## 1. Resume Parsing & NLP
@@ -87,10 +91,11 @@ The ATS Resume Analyzer processes resumes through a multi-stage NLP and AI pipel
 - **SpaCy** extracts structured information from resumes, including contact details, education, technical skills, certifications, programming languages, and experience.
 - Rule-based processing and Named Entity Recognition (NER) organize unstructured resume text into meaningful sections.
 
-## 2. Semantic Resume Matching
+## 2. Similarity and Skill Matching
 
-- **Sentence Transformers (`all-MiniLM-L6-v2`)** convert resumes and job descriptions into dense vector embeddings.
-- **Cosine Similarity** measures semantic similarity rather than relying solely on exact keyword matches, enabling recognition of related concepts.
+- **TF-IDF Vectorization** processes resumes and job descriptions using `scikit-learn` to calculate a word-frequency representation.
+- **Cosine Similarity** measures text similarity between vectors to evaluate job description alignment.
+- **Fuzzy String Matching (`rapidfuzz`)** maps candidate skills against their project and experience blocks (case-insensitive & edit distance checks).
 
 ## 3. AI-Powered Resume Analysis
 
@@ -123,7 +128,7 @@ The model generates:
 - Mongoose
 - JWT Authentication
 - REST APIs
-- Resend API (Email OTP)
+- Gmail API (Google OAuth 2.0 Email OTP)
 - Cloudinary
 - Gemini AI
 
@@ -131,10 +136,9 @@ The model generates:
 
 - FastAPI
 - SpaCy
-- Sentence Transformers
-- PyTorch
+- Scikit-Learn (TF-IDF Cosine Similarity)
 - PyMuPDF
-- xhtml2pdf
+- xhtml2pdf / WeasyPrint
 - Groq API
 
 ---
@@ -244,7 +248,10 @@ Create separate `.env` files for:
 PORT=
 MONGO_URI=
 JWT_SECRET=
-RESEND_API_KEY=
+SENDER_EMAIL=
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+GOOGLE_REFRESH_TOKEN=
 CLOUDINARY_CLOUD_NAME=
 CLOUDINARY_API_KEY=
 CLOUDINARY_API_SECRET=

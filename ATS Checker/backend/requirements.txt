@@ -4,13 +4,13 @@ spacy
 python-docx
 pdfplumber
 PyPDF2
-sentence-transformers
 groq
 python-dotenv
 python-magic-bin; sys_platform == 'win32'
 python-magic; sys_platform != 'win32'
 httpx
 weasyprint
+xhtml2pdf
 pyjwt
 python-multipart
 rapidfuzz

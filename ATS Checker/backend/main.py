@@ -44,14 +44,7 @@ async def lifespan(app:FastAPI):
         app.state.nlp = spacy.load(SPACY_MODEL_SECONDARY)
         logger.info(f'Loaded {SPACY_MODEL_SECONDARY} (fallback)')
 
-    logger.info(f'Loading SentenceTransformer: {SENTENCE_TRANSFORMER_MODEL}')
-    import torch
-    torch.set_num_threads(1)
-    torch.set_num_interop_threads(1)
-
-    from sentence_transformers import SentenceTransformer
-    app.state.embedder = SentenceTransformer(SENTENCE_TRANSFORMER_MODEL)
-    logger.info(f'Loaded {SENTENCE_TRANSFORMER_MODEL}')
+    app.state.embedder = None
 
     # Garbage collect to free memory overhead immediately
     import gc

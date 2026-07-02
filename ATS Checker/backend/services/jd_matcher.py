@@ -1,27 +1,26 @@
 from typing import List, Dict
 import numpy as np
 import spacy
-from sentence_transformers import SentenceTransformer
-
-from typing import List, Dict
-import numpy as np
-import spacy
-from sentence_transformers import SentenceTransformer
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 
 from backend.utils.matching import fuzzy_match_keywords, normalize_skill
 from rapidfuzz import fuzz
 
 
 def calculate_semantic_similarity(
-    resume_text: str, jd_text: str, embedder: SentenceTransformer
+    resume_text: str, jd_text: str, embedder=None
 ) -> float:
-    resume_emb = embedder.encode(resume_text[:5000], convert_to_tensor=False)
-    jd_emb     = embedder.encode(jd_text[:5000], convert_to_tensor=False)
-
-    similarity = np.dot(resume_emb, jd_emb) / (
-        np.linalg.norm(resume_emb) * np.linalg.norm(jd_emb)
-    )
-    return float(np.clip(similarity, 0.0, 1.0))
+    if not resume_text or not jd_text:
+        return 0.0
+    try:
+        vectorizer = TfidfVectorizer()
+        # Compute TF-IDF matrix for resume and job description texts
+        tfidf = vectorizer.fit_transform([resume_text[:5000], jd_text[:5000]])
+        sim = cosine_similarity(tfidf[0:1], tfidf[1:2])[0][0]
+        return float(np.clip(sim, 0.0, 1.0))
+    except Exception:
+        return 0.0
 
 
 def identify_matched_keywords(
@@ -95,7 +94,7 @@ def compare_resume_with_jd(
     resume_skills: List[str],
     jd_text: str,
     jd_keywords: List[str],
-    embedder: SentenceTransformer,
+    embedder,
     nlp: spacy.Language,
 ) -> Dict:
     semantic_similarity = calculate_semantic_similarity(resume_text, jd_text, embedder)

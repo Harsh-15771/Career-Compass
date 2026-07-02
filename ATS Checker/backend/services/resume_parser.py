@@ -42,6 +42,16 @@ def validate_file(file_data:bytes, filename:str)->Tuple[bool, str, Optional[str]
     
     try:
         mime_type=magic.from_buffer(file_data, mime=True)
+        # Fallback for Windows where python-magic might return application/octet-stream for zip-based docx
+        if mime_type == 'application/octet-stream' and filename:
+            import os
+            ext = os.path.splitext(filename)[1].lower()
+            if ext == '.docx':
+                mime_type = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+            elif ext == '.doc':
+                mime_type = 'application/msword'
+            elif ext == '.pdf':
+                mime_type = 'application/pdf'
     except Exception as e:
         return False, f"error deteminin the file type : {e}", None
     
@@ -52,8 +62,6 @@ def validate_file(file_data:bytes, filename:str)->Tuple[bool, str, Optional[str]
             f'Please upload one of: {supported}.'
         ), None
     
-    
-
     return True, '', SUPPORTED_MIME_TYPES[mime_type]
 
 def _extract_pdf_hyperlinks(file_data: bytes) -> str:
