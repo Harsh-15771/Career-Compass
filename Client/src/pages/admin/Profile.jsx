@@ -92,10 +92,11 @@ const Profile = () => {
       await axios.delete("/api/user/profile");
 
       await fetchBlogs();
-      logout();
-
-      toast.success("Account deleted");
       navigate("/");
+      setTimeout(() => {
+        logout();
+        toast.success("Account deleted");
+      }, 0);
     } catch {
       toast.error("Delete failed");
     } finally {

@@ -1,171 +1,322 @@
 # Career Compass
 
-Career Compass is a **full‑stack web platform** built to explore real‑world authentication, user interaction, and scalable backend design. The project goes beyond basic CRUD functionality and focuses on **engineering decisions commonly seen in production systems**.
+Career Compass is a **full-stack career development platform** that combines community-driven content sharing with an **AI-powered ATS Resume Analyzer**. The project demonstrates scalable backend architecture, secure authentication, REST API design, and the integration of modern NLP and Generative AI into a real-world web application.
 
-The application combines secure authentication, user‑generated content, and interaction features in a clean, maintainable architecture.
-
----
-
-## Overview
-
-Career Compass allows users to create and share career‑related content, interact with posts through applauds, and explore public user profiles. The project is designed to demonstrate practical backend thinking, API design, and secure identity handling.
+The application follows a **service-oriented architecture**, where the primary application is built with **Node.js/Express**, while compute-intensive resume analysis is handled by an independent **FastAPI** service. Both services communicate through REST APIs, allowing them to evolve and scale independently.
 
 ---
 
-## Technology Stack
+# ✨ Highlights
 
-### Frontend
-
-* React (Vite)
-* Context API for state management
-* Axios for API communication
-* Tailwind CSS
-
-### Backend
-
-* Node.js
-* Express.js
-* MongoDB with Mongoose
-* JWT‑based authentication
-
-### External Services
-
-* Email OTP delivery using Nodemailer
-* Cloudinary for media storage
-* Gemini AI (content assistance)
+- 🔐 JWT Authentication with Email OTP Verification
+- 📝 Rich Text Blogging Platform
+- 👏 Community Applaud System
+- 📊 AI-Powered ATS Resume Analyzer
+- 🧠 Semantic Resume–Job Description Matching
+- 📄 Multi-page PDF Report Generation
+- 📈 Historical ATS Analysis Tracking
+- 🏗️ Service-Oriented Architecture (Node.js + FastAPI)
+- 📱 Responsive React Frontend
 
 ---
 
-## Authentication & Authorization
+# Overview
 
-The authentication system is designed to handle multiple identity providers while maintaining database integrity and security.
+Career Compass enables users to publish career-related content, engage with the community through applauds, and analyze resumes against job descriptions using an AI-powered ATS engine.
 
-### Email and Password with OTP Verification
-
-* Users sign up using email and password
-* User data is first stored in a temporary **PendingUser** collection
-* A time‑bound OTP is sent to the registered email
-* The user record is created in the main `users` collection only after successful OTP verification
-* This approach ensures that no unverified user data exists in the primary database
-
-### Session Handling
-
-* JWT is issued after successful authentication
-* Protected routes are secured using middleware
-* Authorization checks are enforced on the backend
+Beyond traditional CRUD functionality, the project emphasizes clean backend architecture, secure identity management, modular service design, and practical integration of NLP and Generative AI technologies.
 
 ---
 
-## Blog Management
+# 🏗️ System Architecture
 
-* Authenticated users can create, edit, and delete blogs
-* Only the original author is allowed to modify or delete their content
-* Ownership checks are enforced server‑side
-* Blogs support rich text and media uploads
-
----
-
-## Applaud System
-
-The applaud feature is implemented with scalability and data integrity in mind.
-
-### Design Approach
-
-* Applauds are stored in a separate `Applaud` collection
-* Each applaud links a single user to a single blog
-* A compound unique index on `(user, blog)` prevents duplicate applauds
-
-### Benefits
-
-* Prevents repeated applauds by the same user
-* Avoids unbounded array growth in blog documents
-* Enables efficient aggregation and analytics
-
----
-
-## Public User Profiles
-
-Each user has a publicly accessible profile page.
-
-### Profile Information
-
-* User name and avatar
-* Academic details (branch and year)
-* Blogs authored by the user
-* Total applauds received across all blogs
-
-### Data Exposure Policy
-
-* Email addresses and authentication details are never exposed
-* Public and private user data are clearly separated
-
----
-
-## Media Handling
-
-* Images are uploaded and stored using Cloudinary
-* Secure upload presets are used
-* Optimized media delivery for frontend usage
-
----
-
-## AI Integration
-
-* Gemini AI is integrated to assist with content creation
-* Designed as an optional productivity feature rather than a core dependency
-
----
-
-## Key Design Considerations
-
-* No unverified users stored in the main database
-* OTPs and passwords are securely hashed
-* Authentication logic is centralized and enforced server‑side
-* Data models are designed with scalability in mind
-* Clear separation of concerns across controllers, routes, and services
-
----
-
-## Project Structure
-
-```
-client/
-  ├─ components/
-  ├─ pages/
-  ├─ context/
-  └─ services/
-
-server/
-  ├─ controllers/
-  ├─ models/
-  ├─ routes/
-  ├─ middleware/
-  └─ config/
+```text
+                React (Vite)
+                     │
+              REST API Requests
+                     │
+                     ▼
+        Node.js / Express Backend
+          │                  │
+          │                  ▼
+          │             MongoDB
+          │
+          │ HTTP Requests
+          ▼
+      FastAPI ATS Engine
+          │
+          ├── SpaCy NLP
+          ├── Sentence Transformers
+          ├── Groq (Llama 3)
+          └── PDF Report Generator
 ```
 
 ---
 
-## Testing
+# 🧠 AI-Powered ATS Analysis Pipeline
 
-* Manual API testing using Postman
-* Authentication, authorization, and edge cases verified
-* Duplicate applauds and unauthorized actions handled gracefully
+The ATS Resume Analyzer processes resumes through a multi-stage NLP and AI pipeline.
+
+```text
+[Resume PDF / DOCX]
+          │
+          ▼
+   Text Extraction
+          │
+          ▼
+     SpaCy NLP Parsing
+          │
+          ▼
+ Entity & Keyword Extraction
+          │
+          ▼
+ Sentence Transformer Embeddings
+          │
+          ▼
+ Cosine Similarity Matching
+          │
+          ▼
+ Groq Llama-3 Analysis
+          │
+          ▼
+ ATS Score + Suggestions + PDF Report
+```
+
+## 1. Resume Parsing & NLP
+
+- **SpaCy** extracts structured information from resumes, including contact details, education, technical skills, certifications, programming languages, and experience.
+- Rule-based processing and Named Entity Recognition (NER) organize unstructured resume text into meaningful sections.
+
+## 2. Semantic Resume Matching
+
+- **Sentence Transformers (`all-MiniLM-L6-v2`)** convert resumes and job descriptions into dense vector embeddings.
+- **Cosine Similarity** measures semantic similarity rather than relying solely on exact keyword matches, enabling recognition of related concepts.
+
+## 3. AI-Powered Resume Analysis
+
+The ATS engine combines extracted resume information and semantic matching results before sending structured prompts to **Groq (Llama 3)**.
+
+The model generates:
+
+- ATS Formatting Score
+- Content Quality Score
+- Missing Keyword Analysis
+- Skill Validation
+- Personalized Resume Improvement Suggestions
 
 ---
 
-## Future Improvements
+# 🛠️ Technology Stack
 
-* Rate limiting for authentication and OTP requests
-* Audit logging for critical actions
-* Advanced analytics on user engagement
-* AI‑driven career recommendations
+## Frontend
+
+- React (Vite)
+- Tailwind CSS
+- Context API
+- Axios
+
+## Primary Backend (Node.js / Express)
+
+- Node.js
+- Express.js
+- MongoDB
+- Mongoose
+- JWT Authentication
+- REST APIs
+- Resend API (Email OTP)
+- Cloudinary
+- Gemini AI
+
+## ATS Backend (Python / FastAPI)
+
+- FastAPI
+- SpaCy
+- Sentence Transformers
+- PyTorch
+- PyMuPDF
+- xhtml2pdf
+- Groq API
 
 ---
 
-## Author
+# 🚀 Key Features
 
-Harsh Mishra
+## 🔐 Secure Authentication
+
+- JWT Authentication
+- Email OTP Verification
+- Protected Routes
+- Account Verification Workflow
+
+## 📝 Community Blogging
+
+- Rich Text Blog Editor
+- Create, Edit and Delete Blogs
+- Public User Profiles
+- Responsive UI
+
+## 👏 Applaud System
+
+- One applaud per user per post
+- Compound Unique Indexes
+- Optimized interaction tracking
+
+## 📊 AI ATS Resume Analyzer
+
+- Resume Upload (PDF/DOCX)
+- Resume Parsing
+- Job Description Matching
+- Semantic Similarity Scoring
+- Keyword Analysis
+- Skill Validation
+- AI-Generated Feedback
+- Multi-page PDF Report Generation
+- Historical Analysis Tracking
 
 ---
 
-This project is intended to demonstrate **practical full‑stack engineering skills**, secure authentication design, and scalable backend architecture suitable for real‑world applications.
+# 📂 Project Structure
+
+```text
+Career-Compass/
+│
+├── Client/
+│   ├── src/
+│   │   ├── assets/
+│   │   ├── components/
+│   │   ├── context/
+│   │   ├── pages/
+│   │   └── utils/
+│   └── package.json
+│
+├── server/
+│   ├── configs/
+│   ├── controllers/
+│   ├── middleware/
+│   ├── models/
+│   ├── routes/
+│   ├── utils/
+│   └── server.js
+│
+└── ATS Checker/
+    └── backend/
+        ├── api/
+        ├── core/
+        ├── models/
+        ├── services/
+        ├── templates/
+        ├── utils/
+        └── main.py
+```
+
+---
+
+# 🔧 Installation & Setup
+
+## Prerequisites
+
+- Node.js
+- Python 3.10+
+- MongoDB
+
+---
+
+## Clone the Repository
+
+```bash
+git clone https://github.com/<username>/Career-Compass.git
+cd Career-Compass
+```
+
+---
+
+## Configure Environment Variables
+
+Create separate `.env` files for:
+
+- Client
+- Server
+- ATS Backend
+
+### Server
+
+```env
+PORT=
+MONGO_URI=
+JWT_SECRET=
+RESEND_API_KEY=
+CLOUDINARY_CLOUD_NAME=
+CLOUDINARY_API_KEY=
+CLOUDINARY_API_SECRET=
+```
+
+### ATS Backend
+
+```env
+GROQ_API_KEY=
+```
+
+---
+
+## Backend Setup (Node.js)
+
+```bash
+cd server
+npm install
+npm run server
+```
+
+---
+
+## Frontend Setup
+
+```bash
+cd Client
+npm install
+npm run dev
+```
+
+---
+
+## ATS Backend Setup
+
+```bash
+cd "ATS Checker/backend"
+
+python -m venv venv
+
+# Windows
+venv\Scripts\activate
+
+# Linux/macOS
+source venv/bin/activate
+
+pip install -r requirements.txt
+
+python -m spacy download en_core_web_sm
+
+python main.py
+```
+
+---
+
+# 🚀 Future Improvements
+
+- Resume Version Comparison
+- AI Resume Rewriting
+- Company-Specific ATS Scoring
+- Personalized Interview Preparation
+- Skill Gap Analysis
+- Learning Roadmap Recommendations
+
+---
+
+# 👨‍💻 Author
+
+**Harsh Mishra**
+
+Full-Stack Developer | Machine Learning Enthusiast
+
+---
+
+> This project demonstrates modern full-stack development by combining secure authentication, scalable REST APIs, community-driven features, and AI-powered resume analysis through a modular service-oriented architecture.

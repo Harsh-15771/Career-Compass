@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppContext } from "../../context/AppContext";
 import toast from "react-hot-toast";
+import Navbar from "../Navbar";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -51,8 +52,10 @@ const Signup = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
-      <div className="w-full max-w-sm p-6 max-md:m-6 border border-primary/30 shadow-xl shadow-primary/15 rounded-lg">
+    <div className="min-h-screen flex flex-col">
+      <Navbar />
+      <div className="flex-1 flex flex-col items-center justify-center py-10 px-4">
+        <div className="w-full max-w-sm p-6 max-md:m-6 border border-primary/30 shadow-xl shadow-primary/15 rounded-lg">
         <div className="flex flex-col items-center justify-center">
           <div className="w-full py-6 text-center">
             <h1 className="text-3xl font-bold">
@@ -176,6 +179,7 @@ const Signup = () => {
           Login
         </Link>
       </p>
+      </div>
     </div>
   );
 };

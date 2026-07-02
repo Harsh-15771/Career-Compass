@@ -1,0 +1,17 @@
+fastapi
+uvicorn
+spacy
+python-docx
+pdfplumber
+PyPDF2
+sentence-transformers
+groq
+python-dotenv
+python-magic-bin
+httpx
+weasyprint
+pyjwt
+python-multipart
+rapidfuzz
+jinja2
+numpy

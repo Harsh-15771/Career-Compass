@@ -92,8 +92,12 @@ const VerifyOtp = () => {
             Verify Email
           </h2>
 
-          <p className="text-sm text-gray-600 text-center mb-6">
+          <p className="text-sm text-gray-600 text-center mb-4">
             OTP sent to <b>{email}</b>
+          </p>
+
+          <p className="text-xs text-gray-400 text-center -mt-2 mb-6">
+            If you don't see it, please check your <b>Spam or Junk</b> folder.
           </p>
 
           <input

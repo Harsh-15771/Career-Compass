@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAppContext } from "../../context/AppContext";
 import toast from "react-hot-toast";
+import Navbar from "../Navbar";
 
 const Login = () => {
   const { axios, setToken, fetchUserProfile } = useAppContext();
@@ -40,12 +41,14 @@ const Login = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
-      <div className="w-full max-w-sm p-6 border border-primary/30 shadow-xl rounded-lg">
-        <div className="text-center py-6">
-          <h1 className="text-3xl font-bold text-primary">Login</h1>
-          <p className="font-light">Enter your credentials to Login</p>
-        </div>
+    <div className="min-h-screen flex flex-col">
+      <Navbar />
+      <div className="flex-1 flex flex-col items-center justify-center py-10 px-4">
+        <div className="w-full max-w-sm p-6 border border-primary/30 shadow-xl rounded-lg">
+          <div className="text-center py-6">
+            <h1 className="text-3xl font-bold text-primary">Login</h1>
+            <p className="font-light">Enter your credentials to Login</p>
+          </div>
 
         <form onSubmit={handelSubmit} className="text-gray-600">
           <label>Email</label>
@@ -103,6 +106,7 @@ const Login = () => {
           Sign Up
         </Link>
       </p>
+      </div>
     </div>
   );
 };

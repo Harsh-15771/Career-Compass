@@ -230,20 +230,35 @@ const AddBlog = () => {
           {/* Resume */}
           <div className="mt-10">
             <p className="font-medium mb-2">Upload your resume (PDF)</p>
-            <label htmlFor="resume">
-              <img
-                src={resume ? assets.pdf_icon : assets.upload_area}
-                alt=""
-                className="h-20 rounded cursor-pointer"
-              />
-              <input
-                type="file"
-                id="resume"
-                hidden
-                accept="application/pdf"
-                onChange={(e) => setResume(e.target.files[0])}
-              />
-            </label>
+            <div className="flex items-center gap-4">
+              <label htmlFor="resume">
+                <img
+                  src={assets.upload_area}
+                  alt=""
+                  className="h-20 rounded cursor-pointer"
+                />
+                <input
+                  type="file"
+                  id="resume"
+                  hidden
+                  accept="application/pdf"
+                  onChange={(e) => setResume(e.target.files[0])}
+                />
+              </label>
+              {resume && (
+                <div className="flex items-center gap-2 bg-green-50 text-green-700 px-4 py-2 rounded-lg border border-green-200 text-sm">
+                  <span className="font-semibold">Selected:</span>
+                  <span className="truncate max-w-xs">{resume.name}</span>
+                  <button
+                    type="button"
+                    onClick={() => setResume(null)}
+                    className="text-red-500 hover:text-red-700 ml-2 font-bold cursor-pointer"
+                  >
+                    ✕
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Submit */}

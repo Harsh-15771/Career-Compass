@@ -16,6 +16,7 @@ import FAQs from "./pages/FAQs";
 import VerifyOtp from "./pages/VerifyOtp";
 import ForgotPassword from "./components/admin/ForgotPassword";
 import ResetPassword from "./components/admin/ResetPassword";
+import ATSChecker from "./pages/ATSChecker";
 
 const App = () => {
   const { token, authLoading } = useAppContext();
@@ -51,6 +52,16 @@ const App = () => {
         <Route path="/verify-otp" element={<VerifyOtp />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
+        <Route
+          path="/ats-checker"
+          element={
+            token ? (
+              <ATSChecker />
+            ) : (
+              <Navigate to="/login" state={{ from: "/ats-checker" }} />
+            )
+          }
+        />
       </Routes>
     </>
   );

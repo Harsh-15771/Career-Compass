@@ -35,6 +35,30 @@ const Navbar = () => {
 
       {/* Right Section */}
       <div className="flex items-center gap-2 sm:gap-5 min-w-0">
+        {/* ATS Checker */}
+        {token && (
+          <button
+            onClick={() => {
+              if (!token) {
+                toast.error("Please login to continue");
+                navigate("/login", { state: { from: "/ats-checker" } });
+              } else {
+                navigate("/ats-checker");
+              }
+            }}
+            className="
+    px-3 py-2 text-sm
+    sm:px-5 sm:py-3 sm:text-lg
+    font-medium rounded-full
+    bg-primary text-white
+    hover:opacity-90 transition-opacity whitespace-nowrap
+    cursor-pointer
+  "
+          >
+            ATS Checker
+          </button>
+        )}
+
         {/* Add New Blog */}
         <button
           onClick={() => {
@@ -113,8 +137,10 @@ const Navbar = () => {
                   <button
                     onClick={() => {
                       setOpen(false);
-                      logout();
                       navigate("/");
+                      setTimeout(() => {
+                        logout();
+                      }, 0);
                     }}
                     className="w-full text-left px-4 py-3 text-base text-red-500 hover:bg-red-50 cursor-pointer"
                   >

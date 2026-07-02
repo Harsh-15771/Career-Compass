@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ATS Resume Evaluation Report</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;800;900&display=swap');
+    
+    @page {
+      size: A4;
+      margin-top: 1.0cm;
+      margin-bottom: 1.6cm;
+      margin-left: 1.2cm;
+      margin-right: 1.2cm;
+      @frame footer {
+        -pdf-frame-content: footerContent;
+        bottom: 0.8cm;
+        left: 1.2cm;
+        right: 1.2cm;
+        height: 20px;
+      }
+    }
+    
+    body {
+      font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: #1e293b;
+      margin: 0;
+      padding: 0;
+      line-height: 1.4;
+      font-size: 11px;
+      background: #fff;
+    }
+    
+    .page {
+      page-break-after: always;
+      box-sizing: border-box;
+    }
+    .page:last-child {
+      page-break-after: avoid;
+    }
+    
+    /* ── Header ── */
+    .header-table {
+      width: 100%;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 8px;
+      margin-bottom: 15px;
+    }
+    
+    .logo-text {
+      font-size: 16px;
+      font-weight: 800;
+      color: #5044e5;
+      text-decoration: none;
+    }
+    
+    .report-meta {
+      text-align: right;
+      font-size: 9px;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    /* ── Overall Score Card ── */
+    .score-card {
+      background: #fafafa;
+      border: 1px solid #f1f5f9;
+      border-radius: 12px;
+      padding: 14px;
+      text-align: center;
+    }
+    
+    .score-num {
+      font-size: 50px;
+      font-weight: 900;
+      line-height: 1;
+      margin: 6px 0;
+      letter-spacing: -2px;
+    }
+    
+    .score-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #64748b;
+      letter-spacing: 1.5px;
+    }
+    
+    .score-interpretation {
+      font-size: 11px;
+      color: #475569;
+      font-style: italic;
+      margin-top: 6px;
+    }
+    
+    /* ── Progress Bars ── */
+    .section-title {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: #0f172a;
+      letter-spacing: 1px;
+      margin: 0 0 10px 0;
+      border-bottom: 1.5px solid #5044e5;
+      padding-bottom: 3px;
+    }
+    
+    .progress-table {
+      width: 100%;
+    }
+    
+    /* ── Recommendation Cards ── */
+    .rec-card {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-left: 4px solid #f59e0b;
+      border-radius: 6px;
+      padding: 8px 10px;
+      margin-bottom: 6px;
+    }
+    
+    .rec-card.high {
+      border-left-color: #ef4444;
+    }
+    
+    .rec-card-title {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 2px;
+    }
+    
+    .rec-card-exp {
+      font-size: 10px;
+      color: #475569;
+      margin-bottom: 4px;
+    }
+    
+    .rec-card-fix {
+      font-size: 9.5px;
+      background: #f8fafc;
+      padding: 4px 6px;
+      border-radius: 4px;
+      color: #047857;
+      border: 1px dashed #e2e8f0;
+    }
+    
+    /* ── Stats Bar ── */
+    .stats-table {
+      width: 100%;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    
+    .stat-box {
+      padding: 8px 4px;
+      border-radius: 8px;
+      border: 1.5px solid #f1f5f9;
+    }
+    
+    .stat-num {
+      font-size: 18px;
+      font-weight: 800;
+    }
+    
+    .stat-lbl {
+      font-size: 8.5px;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: #64748b;
+      letter-spacing: 0.5px;
+    }
+    
+    /* ── Footer ── */
+    .footer-table {
+      width: 100%;
+      border-top: 1px solid #e2e8f0;
+      padding-top: 4px;
+      font-size: 8.5px;
+      color: #94a3b8;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Unified Frame-based Footer Element (Parsed first, displayed on all pages bottom) -->
+  <div id="footerContent">
+    <table style="width: 100%; border-top: 1px solid #e2e8f0; padding-top: 4px; font-size: 8.5px; color: #94a3b8;" cellpadding="0" cellspacing="0">
+      <tr>
+        <td>Career Compass — Career Guidance & Resume Platform</td>
+        <td style="text-align: right;">Page <pdf:pagenumber /> of <pdf:pagecount /></td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- ==================== PAGE 1 ==================== -->
+  <div class="page" style="position: relative;">
+    
+    <!-- Header -->
+    <table class="header-table" cellpadding="0" cellspacing="0">
+      <tr>
+        <td style="vertical-align: middle;">
+          <img src="{{ logo_path }}" height="20" style="vertical-align: middle; border: 0;" />
+        </td>
+        <td class="report-meta" style="vertical-align: middle;">
+          ATS Evaluation Report<br>
+          Generated: {{ timestamp | format_date('%B %d, %Y') }}
+        </td>
+      </tr>
+    </table>
+    
+    <!-- Hero Score Section -->
+    <table style="width: 100%; margin-bottom: 15px;" cellpadding="0" cellspacing="0">
+      <tr>
+        <td style="width: 38%; vertical-align: top; padding-right: 10px;">
+          <div class="score-card">
+            <div class="score-label">Overall ATS Score</div>
+            <div class="score-num" style="color: {{ score_color }};">
+              {{ "%.0f" | format(overall_score) }}<span style="font-size: 18px; color: #94a3b8; font-weight: 400;">/100</span>
+            </div>
+            <div class="score-interpretation">
+              {% if interpretation %}
+                {{ interpretation }}
+              {% else %}
+                {% if overall_score >= 80 %}
+                  Great! Your resume should perform well with most ATS systems.
+                {% elif overall_score >= 60 %}
+                  Good start. A few improvements will significantly boost your score.
+                {% else %}
+                  Your resume needs work before applying. Follow the recommendations.
+                {% endif %}
+              {% endif %}
+            </div>
+          </div>
+        </td>
+        <td style="width: 62%; vertical-align: top; padding-left: 10px;">
+          <h2 class="section-title">Score Breakdown</h2>
+          
+          {% set rows = [
+            ('Formatting', component_scores.formatting, 20, component_pct.formatting, 'Structure, headings, bullets'),
+            ('Keywords & Skills', component_scores.keywords, 25, component_pct.keywords, 'Keyword density & relevance'),
+            ('Content Quality', component_scores.content, 25, component_pct.content, 'Action verbs & achievements'),
+            ('Skill Validation', component_scores.skill_validation, 15, component_pct.skill_validation, 'Project-backed evidence'),
+            ('ATS Compatibility', component_scores.ats_compatibility, 15, component_pct.ats_compatibility, 'Clean layout, zero roadblocks')
+          ] %}
+          
+          <table class="progress-table" cellpadding="0" cellspacing="0" style="width: 100%;">
+            {% for label, score, max_score, pct, sub in rows %}
+              {% set bar_color = '#10b981' if pct >= 75 else ('#f59e0b' if pct >= 50 else '#ef4444') %}
+              <tr>
+                <td style="width: 130px; vertical-align: top; padding-bottom: 12px; line-height: 1.15;">
+                  <span style="font-weight: 700; font-size: 10px; color: #1e293b;">{{ label }}</span><br/>
+                  <span style="font-size: 8px; color: #94a3b8;">{{ sub }}</span>
+                </td>
+                <td style="width: 150px; vertical-align: top; padding: 2px 5px 12px 5px;">
+                  <!-- Fixed-width Progress Bar Table inside Cell -->
+                  <table style="width: 140px; height: 8px; background-color: #f1f5f9; border-collapse: collapse; border: none;" cellpadding="0" cellspacing="0">
+                    <tr>
+                      {% if pct > 0 %}
+                        <td style="width: {{ pct }}%; background-color: {{ bar_color }}; height: 8px; line-height: 8px; font-size: 8px; border: none;"></td>
+                      {% endif %}
+                      {% if pct < 100 %}
+                        <td style="width: {{ 100 - pct }}%; background-color: #f1f5f9; height: 8px; line-height: 8px; font-size: 8px; border: none;"></td>
+                      {% endif %}
+                    </tr>
+                  </table>
+                </td>
+                <td style="width: 50px; text-align: right; font-weight: 700; font-size: 10px; color: #1e293b; vertical-align: top; padding-bottom: 12px;">
+                  {{ "%.0f" | format(score) }}/{{ max_score }}
+                </td>
+              </tr>
+            {% endfor %}
+          </table>
+        </td>
+      </tr>
+    </table>
+    
+    <!-- Strengths & Formatting Quality Row -->
+    <table style="width: 100%; margin-top: 5px;" cellpadding="0" cellspacing="0">
+      <tr>
+        <td style="width: 50%; vertical-align: top; padding-right: 10px;">
+          <h2 class="section-title">Resume Strengths</h2>
+          {% if strengths %}
+            {% for s in strengths[:4] %}
+              <div style="margin-bottom: 5px; font-size: 10px; color: #334155; line-height: 1.3;">
+                <span style="color: #10b981; font-weight: 900; margin-right: 4px;">✓</span> {{ s }}
+              </div>
+            {% endfor %}
+          {% else %}
+            <p style="color: #64748b; font-size: 10px; margin: 0;">No major strengths detected. Incorporate the recommendations on page 2 to build them.</p>
+          {% endif %}
+        </td>
+        <td style="width: 50%; vertical-align: top; padding-left: 10px;">
+          <h2 class="section-title">Formatting & Compatibility</h2>
+          
+          <table style="width: 100%; font-size: 10px; border: 1px solid #f1f5f9; border-radius: 8px;" cellpadding="5" cellspacing="0">
+            <tr style="background: #f8fafc;">
+              <td style="font-weight: 700; width: 60%; border-bottom: 1px solid #f1f5f9;">Grammar & Spelling</td>
+              <td style="text-align: right; color: #047857; font-weight: 700; border-bottom: 1px solid #f1f5f9; width: 40%;">
+                <span style="background: #dcfce7; padding: 1px 4px; border-radius: 4px; font-size: 8px;">CLEAN (0 Errors)</span>
+              </td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700; border-bottom: 1px solid #f1f5f9;">Formatting Score</td>
+              <td style="text-align: right; font-weight: 700; border-bottom: 1px solid #f1f5f9;">
+                {{ "%.0f" | format(component_scores.formatting) }}/20
+              </td>
+            </tr>
+            <tr style="background: #f8fafc;">
+              <td style="font-weight: 700; border-bottom: 1px solid #f1f5f9;">Compatibility Rating</td>
+              <td style="text-align: right; color: #5044e5; font-weight: 700; border-bottom: 1px solid #f1f5f9;">
+                {{ "%.0f" | format(component_scores.ats_compatibility) }}/15
+              </td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700; vertical-align: middle;">Parser Friendliness</td>
+              <td style="text-align: right; color: #475569; font-size: 9px; line-height: 1.1;">
+                {% if component_pct.ats_compatibility >= 80 %}
+                  Optimal. Clean layout, highly readable.
+                {% else %}
+                  Warnings. Formatting fixes required.
+                {% endif %}
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    
+  </div>
+
+  <!-- ==================== PAGE 2 ==================== -->
+  <div class="page" style="position: relative; page-break-after: avoid;">
+    
+    <!-- Header -->
+    <table class="header-table" cellpadding="0" cellspacing="0">
+      <tr>
+        <td style="vertical-align: middle;">
+          <img src="{{ logo_path }}" height="20" style="vertical-align: middle; border: 0;" />
+        </td>
+        <td class="report-meta" style="vertical-align: middle;">
+          ATS Evaluation Report<br>
+          Generated: {{ timestamp | format_date('%B %d, %Y') }}
+        </td>
+      </tr>
+    </table>
+    
+    <!-- Skill Validation Summary Stats -->
+    <h2 class="section-title">Skill Validation & Evidence</h2>
+    <table class="stats-table" cellpadding="0" cellspacing="8">
+      <tr>
+        <td style="width: 33.3%;">
+          <div class="stat-box" style="background: #f8fafc;">
+            <div class="stat-num" style="color: #1e293b;">{{ total_skills }}</div>
+            <div class="stat-lbl">Total Skills</div>
+          </div>
+        </td>
+        <td style="width: 33.3%;">
+          <div class="stat-box" style="background: #ecfdf5;">
+            <div class="stat-num" style="color: #047857;">{{ validated_count }}</div>
+            <div class="stat-lbl">Validated ({{ "%.0f" | format(validation_pct) }}%)</div>
+          </div>
+        </td>
+        <td style="width: 33.3%;">
+          <div class="stat-box" style="background: #fef2f2;">
+            <div class="stat-num" style="color: #b91c1c;">{{ unvalidated_skills | length }}</div>
+            <div class="stat-lbl">Need Evidence</div>
+          </div>
+        </td>
+      </tr>
+    </table>
+    
+    <!-- Skills Grid Section -->
+    <table style="width: 100%; margin-bottom: 12px; table-layout: fixed;" cellpadding="0" cellspacing="0">
+      <tr>
+        <td style="width: 50%; vertical-align: top; padding-right: 8px;">
+          <div style="font-weight: 700; font-size: 10.5px; margin-bottom: 4px; color: #047857;">Validated Skills</div>
+          
+          <table style="width: 100%; font-size: 9px;" cellpadding="3" cellspacing="0">
+            {% if validated_skills %}
+              {% for row in validated_skills[:14]|batch(2) %}
+                <tr>
+                  {% for item in row %}
+                    <td style="width: 50%; vertical-align: top; border-bottom: 1px solid #f8fafc;">
+                      <span style="font-weight: 700; color: #065f46;">✔ {{ item.skill }}</span>
+                      {% if item.projects %}
+                        <div style="color: #64748b; font-size: 7.5px; margin-top: 1px;">({{ item.projects[0][:15] }}{% if item.projects[0]|length > 15 %}...{% endif %})</div>
+                      {% endif %}
+                    </td>
+                  {% endfor %}
+                  {% if row|length == 1 %}
+                    <td style="width: 50%;">&nbsp;</td>
+                  {% endif %}
+                </tr>
+              {% endfor %}
+              {% if validated_skills|length > 14 %}
+                <tr>
+                  <td colspan="2" style="font-size: 8px; color: #64748b; padding-top: 2px;">+{{ validated_skills|length - 14 }} more validated</td>
+                </tr>
+              {% endif %}
+            {% else %}
+              <tr>
+                <td style="color: #64748b;">No validated skills found.</td>
+              </tr>
+            {% endif %}
+          </table>
+        </td>
+        
+        <td style="width: 50%; vertical-align: top; padding-left: 8px;">
+          <div style="font-weight: 700; font-size: 10.5px; margin-bottom: 4px; color: #b91c1c;">Unvalidated Skills (Need Context)</div>
+          
+          <table style="width: 100%; font-size: 9px;" cellpadding="3" cellspacing="0">
+            {% if unvalidated_skills %}
+              {% for row in unvalidated_skills[:16]|batch(2) %}
+                <tr>
+                  {% for skill in row %}
+                    <td style="width: 50%; vertical-align: top; color: #991b1b; border-bottom: 1px solid #f8fafc;">
+                      ✖ {{ skill }}
+                    </td>
+                  {% endfor %}
+                  {% if row|length == 1 %}
+                    <td style="width: 50%;">&nbsp;</td>
+                  {% endif %}
+                </tr>
+              {% endfor %}
+              {% if unvalidated_skills|length > 16 %}
+                <tr>
+                  <td colspan="2" style="font-size: 8px; color: #64748b; padding-top: 2px;">+{{ unvalidated_skills|length - 16 }} more</td>
+                </tr>
+              {% endif %}
+            {% else %}
+              <tr>
+                <td style="color: #047857; font-weight: 700;">✓ All skills have evidence!</td>
+              </tr>
+            {% endif %}
+          </table>
+        </td>
+      </tr>
+    </table>
+    
+    <!-- Job Description Match Analysis -->
+    <h2 class="section-title">Job Description Comparison</h2>
+    <div style="border: 1px solid #f1f5f9; border-radius: 8px; padding: 8px; margin-bottom: 12px; background: #fafafa;">
+      {% if jd_analysis and jd_analysis.match_percentage > 0 %}
+        <table style="width: 100%;" cellpadding="0" cellspacing="0">
+          <tr>
+            <td style="width: 25%; vertical-align: middle; border-right: 1px solid #e2e8f0; padding-right: 8px; text-align: center;">
+              <div style="font-size: 22px; font-weight: 900; color: #5044e5; line-height: 1.1;">{{ jd_analysis.match_percentage }}%</div>
+              <div style="font-size: 8px; font-weight: 700; text-transform: uppercase; color: #64748b; letter-spacing: 0.5px;">Job Match</div>
+            </td>
+            <td style="width: 75%; padding-left: 10px; vertical-align: top;">
+              <div style="font-size: 9.5px; color: #475569; margin-bottom: 3px;">
+                <strong>Similarity Strength:</strong> {{ jd_analysis.semantic_similarity }}
+              </div>
+              <div style="font-size: 9px; line-height: 1.3; color: #334155;">
+                <strong style="color: #047857;">Matched Keywords:</strong>
+                {% for kw in jd_analysis.matched_keywords[:10] %}{{ kw }}{% if not loop.last %}, {% endif %}{% endfor %}{% if jd_analysis.matched_keywords|length > 10 %}...{% endif %}
+              </div>
+              <div style="font-size: 9px; line-height: 1.3; margin-top: 2px; color: #334155;">
+                <strong style="color: #b91c1c;">Missing Keywords:</strong>
+                {% for kw in jd_analysis.missing_keywords[:10] %}{{ kw }}{% if not loop.last %}, {% endif %}{% endfor %}{% if jd_analysis.missing_keywords|length > 10 %}...{% endif %}
+              </div>
+            </td>
+          </tr>
+        </table>
+      {% else %}
+        <div style="text-align: center; color: #64748b; font-size: 10px; padding: 2px 0;">
+          <strong>No Job Description provided.</strong> Run the evaluation with a job description to calculate exact match percentages and extract missing keywords.
+        </div>
+      {% endif %}
+    </div>
+    
+    <!-- Critical Recommendations -->
+    <h2 class="section-title">Priority Recommendations</h2>
+    <div style="margin-bottom: 15px;">
+      {% set displayed_issues = [] %}
+      
+      {% if high_priority %}
+        {% for issue in high_priority[:2] %}
+          <div class="rec-card high">
+            <div class="rec-card-title">[HIGH PRIORITY] {{ issue.issue_title }}</div>
+            <div class="rec-card-exp">{{ issue.explanation }}</div>
+            <div class="rec-card-fix"><strong>Fix:</strong> {{ issue.how_to_fix }}</div>
+          </div>
+          {% set _ = displayed_issues.append(1) %}
+        {% endfor %}
+      {% endif %}
+      
+      {% if medium_priority and displayed_issues|length < 3 %}
+        {% for issue in medium_priority[:(3 - displayed_issues|length)] %}
+          <div class="rec-card">
+            <div class="rec-card-title">[MEDIUM PRIORITY] {{ issue.issue_title }}</div>
+            <div class="rec-card-exp">{{ issue.explanation }}</div>
+            <div class="rec-card-fix"><strong>Fix:</strong> {{ issue.how_to_fix }}</div>
+          </div>
+        {% endfor %}
+      {% endif %}
+      
+      {% if not high_priority and not medium_priority %}
+        <div style="font-size: 10.5px; padding: 10px; border-radius: 6px; background: #ecfdf5; color: #065f46; text-align: center; border: 1px solid #d1fae5;">
+          ✓ Your resume is in excellent shape! No critical or medium priority issues were detected.
+        </div>
+      {% endif %}
+    </div>
+    
+  </div>
+
+</body>
+</html>

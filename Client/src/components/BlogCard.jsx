@@ -19,7 +19,7 @@ const BlogCard = ({ blog }) => {
     >
       {/* Image */}
       {imageUrl && (
-        <img src={imageUrl} alt="" className="w-full h-48 object-cover" />
+        <img src={imageUrl} alt="" className="w-full h-48 object-contain bg-gray-50 border-b border-gray-100" />
       )}
 
       {/* Content */}
