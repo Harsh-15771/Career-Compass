@@ -317,3 +317,21 @@
 2026-07-03 02:56:13,055 - INFO - Loaded en_core_web_sm
 2026-07-03 02:56:13,096 - INFO - All models loaded. API is ready to serve requests.
 2026-07-03 02:56:26,968 - INFO - Generating PDF using xhtml2pdf (Single Unified Report)...
+2026-07-03 03:13:03,557 - INFO - Starting ATS Resume Analyzer API...
+2026-07-03 03:13:03,557 - INFO - Loading spaCy NLP model: en_core_web_sm
+2026-07-03 03:13:05,483 - INFO - Loaded en_core_web_sm
+2026-07-03 03:13:05,532 - INFO - All models loaded. API is ready to serve requests.
+2026-07-03 03:13:05,724 - INFO - parse_Resume_file: parsing file :test_resume.docx
+2026-07-03 03:13:05,750 - INFO - resume_parser: Extracted 105 chars from DOCX
+2026-07-03 03:13:05,750 - INFO - parse_resume_file: Extracted 105 chars from test_resume.docx
+2026-07-03 03:13:05,750 - INFO - Parsed 'test_resume.docx': 105 chars extracted
+2026-07-03 03:13:11,312 - INFO - Groq parsed summary: ''
+2026-07-03 03:13:11,312 - INFO - Groq parsed skills count: 6
+2026-07-03 03:13:11,312 - INFO - Groq parsed experience count: 0
+2026-07-03 03:13:11,839 - INFO - shutting down the api!!
+2026-07-03 03:13:11,843 - INFO - Starting ATS Resume Analyzer API...
+2026-07-03 03:13:11,843 - INFO - Loading spaCy NLP model: en_core_web_sm
+2026-07-03 03:13:12,261 - INFO - Loaded en_core_web_sm
+2026-07-03 03:13:12,343 - INFO - All models loaded. API is ready to serve requests.
+2026-07-03 03:13:13,766 - INFO - Generating PDF using xhtml2pdf (Single Unified Report)...
+2026-07-03 03:13:16,277 - INFO - shutting down the api!!
