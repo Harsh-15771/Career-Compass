@@ -14,5 +14,6 @@ xhtml2pdf
 pyjwt
 python-multipart
 rapidfuzz
+scikit-learn
 jinja2
 numpy
