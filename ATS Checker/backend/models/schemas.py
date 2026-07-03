@@ -51,3 +51,4 @@ class AnalysisResponse(BaseModel):
     jd_comparison: Optional[JDComparison] = None
     warnings: List[str] = []
     interpretation: str = ""
+    timestamp: Optional[str] = None

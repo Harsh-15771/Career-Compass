@@ -418,3 +418,19 @@
 2026-07-04 00:43:52,191 - INFO - Loading spaCy NLP model: en_core_web_sm
 2026-07-04 00:43:53,522 - INFO - Loaded en_core_web_sm
 2026-07-04 00:43:53,550 - INFO - All models loaded. API is ready to serve requests.
+2026-07-04 00:50:17,593 - INFO - parse_Resume_file: parsing file :Harsh_Resume.pdf
+2026-07-04 00:50:17,903 - INFO - parse_resume_file: Extracted 4299 chars from Harsh_Resume.pdf
+2026-07-04 00:50:17,903 - INFO - Parsed 'Harsh_Resume.pdf': 4299 chars extracted
+2026-07-04 00:50:20,380 - INFO - Groq parsed summary: ''
+2026-07-04 00:50:20,380 - INFO - Groq parsed skills count: 40
+2026-07-04 00:50:20,380 - INFO - Groq parsed experience count: 2
+2026-07-04 00:52:51,603 - INFO - Starting ATS Resume Analyzer API...
+2026-07-04 00:52:51,603 - INFO - Loading spaCy NLP model: en_core_web_sm
+2026-07-04 00:52:52,394 - INFO - Loaded en_core_web_sm
+2026-07-04 00:52:52,419 - INFO - All models loaded. API is ready to serve requests.
+2026-07-04 01:00:37,441 - INFO - shutting down the api!!
+2026-07-04 01:00:38,067 - INFO - Starting ATS Resume Analyzer API...
+2026-07-04 01:00:38,067 - INFO - Loading spaCy NLP model: en_core_web_sm
+2026-07-04 01:00:38,839 - INFO - Loaded en_core_web_sm
+2026-07-04 01:00:38,867 - INFO - All models loaded. API is ready to serve requests.
+2026-07-04 01:00:50,476 - INFO - shutting down the api!!

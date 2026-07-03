@@ -1,6 +1,6 @@
 import os
 import base64
-from datetime import datetime
+from datetime import datetime, timedelta
 from jinja2 import Environment, FileSystemLoader
 from typing import Dict
 
@@ -13,12 +13,15 @@ except (ImportError, OSError):
 TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), '..', 'templates')
 env = Environment(loader=FileSystemLoader(TEMPLATE_DIR))
 
-def format_date(value, fmt='%B %d, %Y at %I:%M %p'):
-    """Convert ISO timestamp string → human-readable date string."""
+def format_date(value, fmt='%B %d, %Y'):
+    """Convert ISO timestamp string → human-readable date string in IST (+5:30)."""
     if not value:
         return ''
     try:
         dt = datetime.fromisoformat(value.replace('Z', '+00:00'))
+        if dt.tzinfo is not None:
+            # Shift UTC to IST (+5:30) for display purposes
+            dt = dt + timedelta(hours=5, minutes=30)
         return dt.strftime(fmt)
     except Exception:
         return value
@@ -27,7 +30,7 @@ env.filters['format_date'] = format_date
 
 def generate_html_reports(analysis_data: Dict) -> Dict[str, str]:
     # 1. Extract timestamp 
-    now = datetime.now().isoformat()
+    now = analysis_data.get('timestamp') or datetime.now().isoformat() + "Z"
 
     # 2.Overall score + interpretation 
     overall_score = analysis_data.get('ATS_score', 0) or analysis_data.get('ats_score', 0)

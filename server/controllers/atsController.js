@@ -183,6 +183,11 @@ export const deleteHistoryEntry = async (req, res) => {
 /* ================= GENERATE PDF FROM ACTIVE RESULT ================= */
 export const generatePdf = async (req, res) => {
   try {
+    const payload = {
+      ...req.body,
+      timestamp: new Date().toISOString()
+    };
+
     const atsApiUrl = (process.env.ATS_API_URL || "http://localhost:8000").replace(/\/+$/, "");
     const response = await fetch(`${atsApiUrl}/api/v1/generate-pdf`, {
       method: "POST",
@@ -190,7 +195,7 @@ export const generatePdf = async (req, res) => {
         "Content-Type": "application/json",
         "Authorization": req.headers.authorization || "",
       },
-      body: JSON.stringify(req.body),
+      body: JSON.stringify(payload),
     });
 
     if (!response.ok) {
@@ -225,6 +230,11 @@ export const generateHistoryPdf = async (req, res) => {
       return res.status(404).json({ message: "Analysis not found" });
     }
 
+    const payload = {
+      ...analysis.analysisResult,
+      timestamp: analysis.createdAt || new Date().toISOString()
+    };
+
     const atsApiUrl = (process.env.ATS_API_URL || "http://localhost:8000").replace(/\/+$/, "");
     const response = await fetch(`${atsApiUrl}/api/v1/generate-pdf`, {
       method: "POST",
@@ -232,7 +242,7 @@ export const generateHistoryPdf = async (req, res) => {
         "Content-Type": "application/json",
         "Authorization": req.headers.authorization || "",
       },
-      body: JSON.stringify(analysis.analysisResult),
+      body: JSON.stringify(payload),
     });
 
     if (!response.ok) {
