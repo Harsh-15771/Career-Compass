@@ -137,6 +137,15 @@ const EditBlog = () => {
 
   if (loading) return null;
 
+  const QUESTIONS = [
+    "Brief introduction and description of your role offered",
+    "How did you get into the company? What was the selection procedure?",
+    "How did you prepare for this role?",
+    "What difficulties did you face and how did you overcome them?",
+    "What major points should be highlighted in a CV for this role?",
+    "Any specific advice for juniors targeting this role?",
+  ];
+
   return (
     <div>
       <Navbar />
@@ -219,9 +228,9 @@ const EditBlog = () => {
 
           {/* -------- QUESTIONS -------- */}
           <div className="mt-10 space-y-6">
-            {Object.values(answers).map((_, index) => (
+            {QUESTIONS.map((question, index) => (
               <div key={index}>
-                <p className="font-medium mb-2">Q{index + 1}</p>
+                <p className="font-medium mb-2">Q{index + 1}. {question}</p>
                 <textarea
                   required
                   className="w-full p-3 border rounded outline-none h-36 resize-none"

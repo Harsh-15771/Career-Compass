@@ -247,7 +247,11 @@ const Blog = () => {
       {/* -------- BLOG BODY -------- */}
       <div className="mx-5 max-w-5xl md:mx-auto my-10 mt-6">
         {imageUrl && (
-          <img src={imageUrl} alt="" className="rounded-3xl mb-5 mx-auto" />
+          <img
+            src={imageUrl}
+            alt=""
+            className="w-full max-w-sm h-auto object-cover rounded-3xl mb-10 mx-auto shadow-md"
+          />
         )}
 
         <div className="rich-text max-w-3xl mx-auto">
