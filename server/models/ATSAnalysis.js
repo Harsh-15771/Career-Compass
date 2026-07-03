@@ -21,10 +21,6 @@ const atsAnalysisSchema = new mongoose.Schema(
         type: String, // Cloudinary secure URL
       },
     },
-    // Restored for backwards compatibility with older records
-    resumeUrl: {
-      type: String,
-    },
     atsScore: {
       type: Number,
       required: true,

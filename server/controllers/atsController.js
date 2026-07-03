@@ -2,18 +2,7 @@ import ATSAnalysis from "../models/ATSAnalysis.js";
 import { cloudinary } from "../configs/cloudinary.js";
 import fs from "fs";
 
-// Helper to extract Cloudinary public_id from secure URL
-const getPublicIdFromUrl = (url) => {
-  try {
-    const match = url?.match(/\/career-compass\/resumes\/[a-zA-Z0-9_-]+/);
-    if (match) {
-      return match[0].replace(/^\//, "");
-    }
-  } catch (e) {
-    return null;
-  }
-  return null;
-};
+// Helper removed to match blog structure directly
 
 /* ================= ANALYZE RESUME ================= */
 export const analyzeResume = async (req, res) => {
@@ -88,8 +77,6 @@ export const analyzeResume = async (req, res) => {
           public_id: resumeUpload.public_id,
           url: resumeUpload.secure_url,
         },
-        // Store string for backward compatibility
-        resumeUrl: resumeUpload.secure_url,
         atsScore: analysisResult.ATS_score || analysisResult.ats_score || 0,
         keywordMatch: analysisResult.jd_match_analysis?.match_percentage || analysisResult.keyword_match || 0,
         missingKeywords: analysisResult.jd_match_analysis?.missing_keywords || analysisResult.missing_keywords || [],
@@ -152,14 +139,14 @@ export const deleteHistoryEntry = async (req, res) => {
     }
 
     // Delete matching PDF file from Cloudinary before deleting DB record
-    const publicId = analysis.resume?.public_id || getPublicIdFromUrl(analysis.resumeUrl);
-    if (publicId) {
-      try {
-        // resource_type: "image" is used because Cloudinary uploads PDFs as images
-        await cloudinary.uploader.destroy(publicId, { resource_type: "image" });
-      } catch (cloudErr) {
-        console.error("Cloudinary delete failed for history entry:", cloudErr.message);
+    try {
+      if (analysis.resume?.public_id) {
+        // Cloudinary stores PDFs as images, but DOCX as raw. Try deleting both to ensure cleanup.
+        await cloudinary.uploader.destroy(analysis.resume.public_id, { resource_type: "image" });
+        await cloudinary.uploader.destroy(analysis.resume.public_id, { resource_type: "raw" });
       }
+    } catch (cloudErr) {
+      console.error("Cloudinary delete failed for history entry:", cloudErr.message);
     }
 
     await ATSAnalysis.deleteOne({ _id: id });

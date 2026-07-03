@@ -3,21 +3,6 @@ import Comment from "../models/Comment.js";
 import User from "../models/User.js";
 import ATSAnalysis from "../models/ATSAnalysis.js";
 import { cloudinary } from "../configs/cloudinary.js";
-
-// Helper to extract Cloudinary public_id from secure URL
-const getPublicIdFromUrl = (url) => {
-  try {
-    const match = url?.match(/\/career-compass\/resumes\/[a-zA-Z0-9_-]+/);
-    if (match) {
-      return match[0].replace(/^\//, "");
-    }
-  } catch (e) {
-    return null;
-  }
-  return null;
-};
-
-// GET USER PROFILE
 export const getProfile = async (req, res) => {
   try {
     res.status(200).json(req.user);
@@ -56,17 +41,20 @@ export const deleteProfile = async (req, res) => {
 
     // 1. DELETE USER ATS HISTORY AND CLOUDINARY RESUMES
     const analyses = await ATSAnalysis.find({ userId: userId });
+
+    // DELETE CLOUDINARY FILES FOR EACH ANALYSIS
     for (const analysis of analyses) {
-      const publicId = analysis.resume?.public_id || getPublicIdFromUrl(analysis.resumeUrl);
-      if (publicId) {
-        try {
-          // resource_type: "image" because Cloudinary stores PDFs as images
-          await cloudinary.uploader.destroy(publicId, { resource_type: "image" });
-        } catch (err) {
-          console.error("ATS resume delete failed:", err.message);
+      try {
+        if (analysis.resume?.public_id) {
+          await cloudinary.uploader.destroy(analysis.resume.public_id, { resource_type: "image" });
+          await cloudinary.uploader.destroy(analysis.resume.public_id, { resource_type: "raw" });
         }
+      } catch (err) {
+        console.error("ATS resume delete failed:", err.message);
       }
     }
+
+    // DELETE ATS HISTORY
     await ATSAnalysis.deleteMany({ userId: userId });
 
     // 2. FIND ALL BLOGS BY USER
@@ -76,7 +64,7 @@ export const deleteProfile = async (req, res) => {
     for (const blog of blogs) {
       try {
         if (blog.profileImage?.public_id) {
-          await cloudinary.uploader.destroy(blog.profileImage.public_id);
+          await cloudinary.uploader.destroy(blog.profileImage.public_id, { resource_type: "image" });
         }
       } catch (err) {
         console.error("Profile image delete failed:", err.message);
@@ -84,7 +72,8 @@ export const deleteProfile = async (req, res) => {
 
       try {
         if (blog.resume?.public_id) {
-          await cloudinary.uploader.destroy(blog.resume.public_id);
+          await cloudinary.uploader.destroy(blog.resume.public_id, { resource_type: "image" });
+          await cloudinary.uploader.destroy(blog.resume.public_id, { resource_type: "raw" });
         }
       } catch (err) {
         console.error("Resume delete failed:", err.message);

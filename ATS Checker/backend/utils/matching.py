@@ -1,7 +1,5 @@
 from typing import Dict, List
 
-from rapidfuzz import fuzz
-
 SKILL_ALIASES: Dict[str, str] = {
     'reactjs':       'react',
     'react.js':      'react',
@@ -46,6 +44,14 @@ def fuzzy_match_keywords(
 
     matched_jd_originals = []
     missing_jd_originals = []
+    
+    # Try loading rapidfuzz, fallback if unavailable
+    has_fuzz = False
+    try:
+        from rapidfuzz import fuzz
+        has_fuzz = True
+    except Exception:
+        pass
 
     for jd_canon, jd_original in jd_normalized.items():
         # 1. Exact canonical match
@@ -54,15 +60,27 @@ def fuzzy_match_keywords(
             continue
 
         # 2. Fuzzy match against all resume canonical names
-        best_score = 0
-        for resume_canon in resume_normalized:
-            score = fuzz.token_sort_ratio(jd_canon, resume_canon)
-            best_score = max(best_score, score)
+        if has_fuzz:
+            best_score = 0
+            for resume_canon in resume_normalized:
+                score = fuzz.token_sort_ratio(jd_canon, resume_canon)
+                best_score = max(best_score, score)
 
-        if best_score >= threshold:
-            matched_jd_originals.append(jd_original)
+            if best_score >= threshold:
+                matched_jd_originals.append(jd_original)
+            else:
+                missing_jd_originals.append(jd_original)
         else:
-            missing_jd_originals.append(jd_original)
+            # Simple substring fallback if rapidfuzz fails to load
+            found = False
+            for resume_canon in resume_normalized:
+                if jd_canon in resume_canon or resume_canon in jd_canon:
+                    found = True
+                    break
+            if found:
+                matched_jd_originals.append(jd_original)
+            else:
+                missing_jd_originals.append(jd_original)
 
     return {
         'matched': sorted(matched_jd_originals),

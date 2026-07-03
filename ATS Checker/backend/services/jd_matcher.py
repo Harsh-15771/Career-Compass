@@ -1,11 +1,9 @@
 from typing import List, Dict
 import numpy as np
 import spacy
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
 
 from backend.utils.matching import fuzzy_match_keywords, normalize_skill
-from rapidfuzz import fuzz
+
 
 
 def calculate_semantic_similarity(
@@ -14,6 +12,9 @@ def calculate_semantic_similarity(
     if not resume_text or not jd_text:
         return 0.0
     try:
+        from sklearn.feature_extraction.text import TfidfVectorizer
+        from sklearn.metrics.pairwise import cosine_similarity
+        
         vectorizer = TfidfVectorizer()
         # Compute TF-IDF matrix for resume and job description texts
         tfidf = vectorizer.fit_transform([resume_text[:5000], jd_text[:5000]])
@@ -56,6 +57,14 @@ def analyze_skills_gap(
     # Normalize resume skills for comparison
     resume_normalized = {normalize_skill(s) for s in resume_skills}
 
+    # Try loading rapidfuzz, fallback if unavailable
+    has_fuzz = False
+    try:
+        from rapidfuzz import fuzz
+        has_fuzz = True
+    except Exception:
+        pass
+
     gap = []
     for jd_skill in jd_skills:
         jd_norm = normalize_skill(jd_skill)
@@ -65,12 +74,22 @@ def analyze_skills_gap(
             continue
 
         # Then try fuzzy match against all resume skills
-        best_score = max(
-            (fuzz.token_sort_ratio(jd_norm, rs) for rs in resume_normalized),
-            default=0,
-        )
-        if best_score < 75:
-            gap.append(jd_skill)
+        if has_fuzz:
+            best_score = max(
+                (fuzz.token_sort_ratio(jd_norm, rs) for rs in resume_normalized),
+                default=0,
+            )
+            if best_score < 75:
+                gap.append(jd_skill)
+        else:
+            # Fallback to simple substring
+            found = False
+            for rs in resume_normalized:
+                if jd_norm in rs or rs in jd_norm:
+                    found = True
+                    break
+            if not found:
+                gap.append(jd_skill)
 
     return sorted(gap)[:20]
 
