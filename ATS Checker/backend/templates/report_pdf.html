@@ -41,6 +41,14 @@
     #footerContent {
       position: running(footerContent);
     }
+    {% if is_weasyprint %}
+    .page-number::after {
+      content: counter(page);
+    }
+    .page-count::after {
+      content: counter(pages);
+    }
+    {% endif %}
     
     body {
       font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -210,7 +218,13 @@
     <table style="width: 100%; border-top: 1px solid #e2e8f0; padding-top: 4px; font-size: 8.5px; color: #94a3b8;" cellpadding="0" cellspacing="0">
       <tr>
         <td>Career Compass — Career Guidance & Resume Platform</td>
-        <td style="text-align: right;">Page <pdf:pagenumber /> of <pdf:pagecount /></td>
+        <td style="text-align: right;">
+          {% if is_weasyprint %}
+            Page <span class="page-number"></span> of <span class="page-count"></span>
+          {% else %}
+            Page <pdf:pagenumber /> of <pdf:pagecount />
+          {% endif %}
+        </td>
       </tr>
     </table>
   </div>
@@ -222,7 +236,7 @@
     <table class="header-table" cellpadding="0" cellspacing="0">
       <tr>
         <td style="vertical-align: middle;">
-          <img src="{{ logo_path }}" height="20" style="vertical-align: middle; border: 0;" />
+          <img src="{{ logo_path }}" style="width: 112px; height: 20px; vertical-align: middle; border: 0;" />
         </td>
         <td class="report-meta" style="vertical-align: middle;">
           ATS Evaluation Report<br>
@@ -358,7 +372,7 @@
     <table class="header-table" cellpadding="0" cellspacing="0">
       <tr>
         <td style="vertical-align: middle;">
-          <img src="{{ logo_path }}" height="20" style="vertical-align: middle; border: 0;" />
+          <img src="{{ logo_path }}" style="width: 112px; height: 20px; vertical-align: middle; border: 0;" />
         </td>
         <td class="report-meta" style="vertical-align: middle;">
           ATS Evaluation Report<br>

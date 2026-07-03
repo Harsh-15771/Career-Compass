@@ -46,8 +46,7 @@ export const deleteProfile = async (req, res) => {
     for (const analysis of analyses) {
       try {
         if (analysis.resume?.public_id) {
-          await cloudinary.uploader.destroy(analysis.resume.public_id, { resource_type: "image" });
-          await cloudinary.uploader.destroy(analysis.resume.public_id, { resource_type: "raw" });
+          await cloudinary.uploader.destroy(analysis.resume.public_id);
         }
       } catch (err) {
         console.error("ATS resume delete failed:", err.message);
@@ -64,7 +63,7 @@ export const deleteProfile = async (req, res) => {
     for (const blog of blogs) {
       try {
         if (blog.profileImage?.public_id) {
-          await cloudinary.uploader.destroy(blog.profileImage.public_id, { resource_type: "image" });
+          await cloudinary.uploader.destroy(blog.profileImage.public_id);
         }
       } catch (err) {
         console.error("Profile image delete failed:", err.message);
@@ -72,8 +71,7 @@ export const deleteProfile = async (req, res) => {
 
       try {
         if (blog.resume?.public_id) {
-          await cloudinary.uploader.destroy(blog.resume.public_id, { resource_type: "image" });
-          await cloudinary.uploader.destroy(blog.resume.public_id, { resource_type: "raw" });
+          await cloudinary.uploader.destroy(blog.resume.public_id);
         }
       } catch (err) {
         console.error("Resume delete failed:", err.message);

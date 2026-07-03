@@ -172,7 +172,7 @@ export const verifyOtp = async (req, res) => {
 
     // Generate JWT AFTER verification
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "7d",
+      expiresIn: "2h",
     });
 
     res.status(200).json({
@@ -231,7 +231,7 @@ export const login = async (req, res) => {
 
     // 5. Generate JWT
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "7d",
+      expiresIn: "2h",
     });
 
     res.status(200).json({

@@ -127,29 +127,28 @@ export const deleteHistoryEntry = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const analysis = await ATSAnalysis.findOne({
-      _id: id,
-      userId: req.user._id,
-    });
+    const analysis = await ATSAnalysis.findById(id);
 
     if (!analysis) {
       return res.status(404).json({
-        message: "Analysis not found or you are not authorized to delete it.",
+        message: "Analysis not found",
       });
+    }
+
+    if (analysis.userId.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: "Unauthorized" });
     }
 
     // Delete matching PDF file from Cloudinary before deleting DB record
     try {
       if (analysis.resume?.public_id) {
-        // Cloudinary stores PDFs as images, but DOCX as raw. Try deleting both to ensure cleanup.
-        await cloudinary.uploader.destroy(analysis.resume.public_id, { resource_type: "image" });
-        await cloudinary.uploader.destroy(analysis.resume.public_id, { resource_type: "raw" });
+        await cloudinary.uploader.destroy(analysis.resume.public_id);
       }
     } catch (cloudErr) {
       console.error("Cloudinary delete failed for history entry:", cloudErr.message);
     }
 
-    await ATSAnalysis.deleteOne({ _id: id });
+    await analysis.deleteOne();
 
     res.status(200).json({ status: "deleted", id });
   } catch (error) {
