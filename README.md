@@ -228,7 +228,7 @@ Career-Compass/
 ## Clone the Repository
 
 ```bash
-git clone https://github.com/<username>/Career-Compass.git
+git clone https://github.com/Harsh-15771/Career-Compass.git
 cd Career-Compass
 ```
 
