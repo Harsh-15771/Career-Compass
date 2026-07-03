@@ -1,8 +1,20 @@
 import ATSAnalysis from "../models/ATSAnalysis.js";
 import { cloudinary } from "../configs/cloudinary.js";
 import fs from "fs";
+import { Blob } from "buffer";
 
-// Helper removed to match blog structure directly
+// Helper to prevent sending raw HTML error pages to the frontend
+const parseApiError = (errorText) => {
+  if (errorText && errorText.trim().startsWith('<')) {
+    return "The analysis engine is currently starting up or temporarily unavailable. Please wait a minute and try again.";
+  }
+  try {
+    const json = JSON.parse(errorText);
+    return json.detail || json.message || errorText;
+  } catch (e) {
+    return errorText;
+  }
+};
 
 /* ================= ANALYZE RESUME ================= */
 export const analyzeResume = async (req, res) => {
@@ -38,7 +50,7 @@ export const analyzeResume = async (req, res) => {
       formData.append("job_description", job_description || "");
 
       // Call the python backend (read from env variable in production, fall back to localhost in development)
-      const atsApiUrl = process.env.ATS_API_URL || "http://localhost:8000";
+      const atsApiUrl = (process.env.ATS_API_URL || "http://localhost:8000").replace(/\/+$/, "");
       const response = await fetch(`${atsApiUrl}/api/v1/analyze-resume`, {
         method: "POST",
         headers: {
@@ -51,7 +63,7 @@ export const analyzeResume = async (req, res) => {
         const errorText = await response.text();
         console.error("FastAPI error response:", errorText);
         return res.status(response.status).json({
-          message: `Analysis engine returned an error: ${errorText}`,
+          message: `Analysis failed: ${parseApiError(errorText)}`,
         });
       }
 
@@ -171,7 +183,7 @@ export const deleteHistoryEntry = async (req, res) => {
 /* ================= GENERATE PDF FROM ACTIVE RESULT ================= */
 export const generatePdf = async (req, res) => {
   try {
-    const atsApiUrl = process.env.ATS_API_URL || "http://localhost:8000";
+    const atsApiUrl = (process.env.ATS_API_URL || "http://localhost:8000").replace(/\/+$/, "");
     const response = await fetch(`${atsApiUrl}/api/v1/generate-pdf`, {
       method: "POST",
       headers: {
@@ -185,7 +197,7 @@ export const generatePdf = async (req, res) => {
       const errorText = await response.text();
       console.error("FastAPI generate PDF error:", errorText);
       return res.status(response.status).json({
-        message: `Failed to generate PDF: ${errorText}`,
+        message: `Failed to generate PDF: ${parseApiError(errorText)}`,
       });
     }
 
@@ -213,7 +225,7 @@ export const generateHistoryPdf = async (req, res) => {
       return res.status(404).json({ message: "Analysis not found" });
     }
 
-    const atsApiUrl = process.env.ATS_API_URL || "http://localhost:8000";
+    const atsApiUrl = (process.env.ATS_API_URL || "http://localhost:8000").replace(/\/+$/, "");
     const response = await fetch(`${atsApiUrl}/api/v1/generate-pdf`, {
       method: "POST",
       headers: {
@@ -227,7 +239,7 @@ export const generateHistoryPdf = async (req, res) => {
       const errorText = await response.text();
       console.error("FastAPI generate history PDF error:", errorText);
       return res.status(response.status).json({
-        message: `Failed to generate PDF: ${errorText}`,
+        message: `Failed to generate PDF: ${parseApiError(errorText)}`,
       });
     }
 

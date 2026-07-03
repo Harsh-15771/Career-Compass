@@ -408,3 +408,13 @@
 2026-07-03 23:42:30,079 - INFO - Loading spaCy NLP model: en_core_web_sm
 2026-07-03 23:42:30,953 - INFO - Loaded en_core_web_sm
 2026-07-03 23:42:30,988 - INFO - All models loaded. API is ready to serve requests.
+2026-07-04 00:07:43,472 - INFO - parse_Resume_file: parsing file :Harsh_Resume_IBM.pdf
+2026-07-04 00:07:43,646 - INFO - parse_resume_file: Extracted 2996 chars from Harsh_Resume_IBM.pdf
+2026-07-04 00:07:43,647 - INFO - Parsed 'Harsh_Resume_IBM.pdf': 2996 chars extracted
+2026-07-04 00:07:45,730 - INFO - Groq parsed summary: 'Third-year engineering undergraduate with a Minor in IoT and experience in building scalable full-st'
+2026-07-04 00:07:45,730 - INFO - Groq parsed skills count: 26
+2026-07-04 00:07:45,730 - INFO - Groq parsed experience count: 1
+2026-07-04 00:43:52,190 - INFO - Starting ATS Resume Analyzer API...
+2026-07-04 00:43:52,191 - INFO - Loading spaCy NLP model: en_core_web_sm
+2026-07-04 00:43:53,522 - INFO - Loaded en_core_web_sm
+2026-07-04 00:43:53,550 - INFO - All models loaded. API is ready to serve requests.
