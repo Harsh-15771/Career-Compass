@@ -45,8 +45,19 @@ export const deleteProfile = async (req, res) => {
     // DELETE CLOUDINARY FILES FOR EACH ANALYSIS
     for (const analysis of analyses) {
       try {
-        if (analysis.resume?.public_id) {
-          await cloudinary.uploader.destroy(analysis.resume.public_id);
+        let publicId = analysis.resume?.public_id;
+        
+        // Fallback for older records that only had resumeUrl
+        if (!publicId && analysis.resumeUrl) {
+          const urlParts = analysis.resumeUrl.split('/');
+          const filename = urlParts[urlParts.length - 1];
+          const folder = urlParts[urlParts.length - 2];
+          const filenameWithoutExt = filename.split('.')[0];
+          publicId = `${folder}/${filenameWithoutExt}`;
+        }
+
+        if (publicId) {
+          await cloudinary.uploader.destroy(publicId);
         }
       } catch (err) {
         console.error("ATS resume delete failed:", err.message);

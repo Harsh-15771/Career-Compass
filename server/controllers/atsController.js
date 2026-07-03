@@ -141,8 +141,19 @@ export const deleteHistoryEntry = async (req, res) => {
 
     // Delete matching PDF file from Cloudinary before deleting DB record
     try {
-      if (analysis.resume?.public_id) {
-        await cloudinary.uploader.destroy(analysis.resume.public_id);
+      let publicId = analysis.resume?.public_id;
+      
+      // Fallback for older records that only had resumeUrl
+      if (!publicId && analysis.resumeUrl) {
+        const urlParts = analysis.resumeUrl.split('/');
+        const filename = urlParts[urlParts.length - 1];
+        const folder = urlParts[urlParts.length - 2];
+        const filenameWithoutExt = filename.split('.')[0];
+        publicId = `${folder}/${filenameWithoutExt}`;
+      }
+
+      if (publicId) {
+        await cloudinary.uploader.destroy(publicId);
       }
     } catch (cloudErr) {
       console.error("Cloudinary delete failed for history entry:", cloudErr.message);
