@@ -1,7 +1,14 @@
 import os
+import base64
 from datetime import datetime
 from jinja2 import Environment, FileSystemLoader
 from typing import Dict
+
+try:
+    import weasyprint
+    IS_WEASYPRINT = True
+except (ImportError, OSError):
+    IS_WEASYPRINT = False
 
 TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), '..', 'templates')
 env = Environment(loader=FileSystemLoader(TEMPLATE_DIR))
@@ -100,10 +107,18 @@ def generate_html_reports(analysis_data: Dict) -> Dict[str, str]:
     logo_path = os.path.abspath(
         os.path.join(
             os.path.dirname(__file__),
-            "..", "..", "..",
-            "Client", "src", "assets", "logo.png"
+            "..", "assets", "logo.png"
         )
     )
+    
+    logo_data_uri = ""
+    try:
+        with open(logo_path, "rb") as image_file:
+            encoded_string = base64.b64encode(image_file.read()).decode('utf-8')
+            logo_data_uri = f"data:image/png;base64,{encoded_string}"
+    except Exception as e:
+        print(f"Warning: Could not load logo for PDF generation: {e}")
+        logo_data_uri = ""
 
     #9. Build shared context dict passed to every template 
     context = {
@@ -122,11 +137,12 @@ def generate_html_reports(analysis_data: Dict) -> Dict[str, str]:
         'validated_skills':   validated_skills,
         'unvalidated_skills': unvalidated_skills,
         'total_skills':       total_skills,
-        'logo_path':          logo_path,
+        'logo_path':          logo_data_uri,
         'validated_count':    validated_count,
         'validation_pct':     validation_pct,
         # JD analysis
         'jd_analysis':        jd_raw,
+        'is_weasyprint':      IS_WEASYPRINT,
     }
 
     return {

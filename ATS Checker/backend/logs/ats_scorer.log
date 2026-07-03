@@ -377,3 +377,30 @@
 2026-07-03 21:38:44,947 - INFO - Loading spaCy NLP model: en_core_web_sm
 2026-07-03 21:38:46,574 - INFO - Loaded en_core_web_sm
 2026-07-03 21:38:46,604 - INFO - All models loaded. API is ready to serve requests.
+2026-07-03 23:38:42,452 - INFO - Starting ATS Resume Analyzer API...
+2026-07-03 23:38:42,452 - INFO - Loading spaCy NLP model: en_core_web_sm
+2026-07-03 23:38:43,964 - INFO - Loaded en_core_web_sm
+2026-07-03 23:38:43,992 - INFO - All models loaded. API is ready to serve requests.
+2026-07-03 23:39:26,560 - INFO - parse_Resume_file: parsing file :Harsh_Resume_IBM.pdf
+2026-07-03 23:39:26,716 - INFO - parse_resume_file: Extracted 2996 chars from Harsh_Resume_IBM.pdf
+2026-07-03 23:39:26,716 - INFO - Parsed 'Harsh_Resume_IBM.pdf': 2996 chars extracted
+2026-07-03 23:39:29,030 - INFO - Groq parsed summary: 'Third-year engineering undergraduate with a Minor in IoT and experience in building scalable full-st'
+2026-07-03 23:39:29,030 - INFO - Groq parsed skills count: 26
+2026-07-03 23:39:29,031 - INFO - Groq parsed experience count: 1
+2026-07-03 23:39:33,212 - INFO - Generating PDF using xhtml2pdf (Single Unified Report)...
+2026-07-03 23:41:04,804 - INFO - shutting down the api!!
+2026-07-03 23:41:05,519 - INFO - Starting ATS Resume Analyzer API...
+2026-07-03 23:41:05,520 - INFO - Loading spaCy NLP model: en_core_web_sm
+2026-07-03 23:41:06,375 - INFO - Loaded en_core_web_sm
+2026-07-03 23:41:06,400 - INFO - All models loaded. API is ready to serve requests.
+2026-07-03 23:41:41,326 - INFO - shutting down the api!!
+2026-07-03 23:41:41,946 - INFO - Starting ATS Resume Analyzer API...
+2026-07-03 23:41:41,946 - INFO - Loading spaCy NLP model: en_core_web_sm
+2026-07-03 23:41:42,825 - INFO - Loaded en_core_web_sm
+2026-07-03 23:41:42,859 - INFO - All models loaded. API is ready to serve requests.
+2026-07-03 23:42:20,950 - INFO - shutting down the api!!
+2026-07-03 23:42:21,487 - INFO - Starting ATS Resume Analyzer API...
+2026-07-03 23:42:21,487 - INFO - Loading spaCy NLP model: en_core_web_sm
+2026-07-03 23:42:22,296 - INFO - Loaded en_core_web_sm
+2026-07-03 23:42:22,327 - INFO - All models loaded. API is ready to serve requests.
+2026-07-03 23:42:29,514 - INFO - shutting down the api!!
